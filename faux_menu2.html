@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ahhhh !!!</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial, sans-serif';
+            background-color: #000;
+            color: #333;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .video-container {
+            width: 64%;
+            max-width: 460px;
+        }
+        .large-video-container {
+            width: 80%;
+            max-width: 800px;
+        }
+        video {
+            width: 100%;
+            height: auto;
+        }
+        .button-container {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .click-button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: none;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        #evacButton {
+            background-color: red;
+            color: white;
+        }
+        #evacButton:hover {
+            background-color: darkred;
+        }
+        #continueButton {
+            background-color: green;
+            color: white;
+        }
+        #continueButton:hover {
+            background-color: darkgreen;
+        }
+        #realContinueButton {
+            background-color: red;
+            color: white;
+        }
+        #realContinueButton:hover {
+            background-color: darkred;
+        }
+        .click-button:hover {
+            opacity: 0.8;
+        }
+        @media (max-width: 600px) {
+            .video-container, .large-video-container {
+                width: 100%;
+                max-width: 360px;
+            }
+            .click-button {
+                font-size: 16px;
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container" id="mouhahaContainer">
+        <video id="mouhahaVideo" autoplay muted playsinline onended="showButtons()">
+            <source src="videos/Mouhaha.mp4" type="video/mp4">
+            Votre navigateur ne supporte pas la balise vidéo.
+        </video>
+    </div>
+    <div class="large-video-container" id="mauvietteContainer" style="display: none;">
+        <video id="mauvietteVideo" muted>
+            <source src="videos/mauviette.mp4" type="video/mp4">
+            Votre navigateur ne supporte pas la balise vidéo.
+        </video>
+        <audio id="mauvietteAudio" src="sons/mauviette.mp3"></audio>
+    </div>
+    <div class="button-container" id="buttonContainer">
+        <a href="javascript:void(0);" class="click-button" id="evacButton" onclick="showMauviette()">J'abandonne...</a>
+        <a href="enigme1.html" class="click-button" id="continueButton">Ça me tente !</a>
+    </div>
+    <div class="button-container" id="mauvietteButtonContainer" style="display: none;">
+        <a href="https://letmegooglethat.com/?q=Comment+vaincre+ses+peurs+%3F" class="click-button" id="realContinueButton">La sortie est par là...</a>
+    </div>
+
+    <script>
+        // Fonction pour afficher les boutons après la fin de la vidéo "Mouhaha"
+        function showButtons() {
+            setTimeout(() => {
+                document.getElementById('evacButton').style.display = 'block';
+                document.getElementById('continueButton').style.display = 'block';
+            }, 1500); // Affiche les boutons après 1.5 secondes
+        }
+
+        // Fonction pour afficher la vidéo et l'audio "Mauviette"
+        function showMauviette() {
+            // Cache les boutons et la vidéo "Mouhaha"
+            document.getElementById('evacButton').style.display = 'none';
+            document.getElementById('continueButton').style.display = 'none';
+            document.getElementById('mouhahaContainer').style.display = 'none';
+            
+            // Affiche la vidéo "Mauviette"
+            const mauvietteContainer = document.getElementById('mauvietteContainer');
+            mauvietteContainer.style.display = 'block';
+
+            const mauvietteVideo = document.getElementById('mauvietteVideo');
+            const mauvietteAudio = document.getElementById('mauvietteAudio');
+
+            // Affiche le bouton "La sortie est par là..." après la fin de la vidéo "Mauviette"
+            mauvietteVideo.addEventListener('ended', () => {
+                document.getElementById('realContinueButton').style.display = 'block';
+                document.getElementById('mauvietteButtonContainer').style.display = 'flex';
+            });
+
+            // Lecture de la vidéo "Mauviette"
+            mauvietteVideo.play().catch(error => {
+                console.error('La lecture automatique a été empêchée:', error);
+                mauvietteVideo.controls = true; // Affiche les contrôles de la vidéo en cas d'erreur
+            });
+
+            // Lecture de l'audio "Mauviette"
+            mauvietteAudio.play().catch(error => {
+                console.error('La lecture automatique de l\'audio a été empêchée:', error);
+            });
+        }
+    </script>
+</body>
+</html>

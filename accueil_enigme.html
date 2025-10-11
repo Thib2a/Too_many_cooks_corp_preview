@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enigme - WK Bucolique 2.0</title>
+    <style>
+        :root {
+            --main-bg-color: #f0f0f0;
+            --main-color: #333;
+            --font-family: 'Arial, sans-serif';
+            --arrow-color: #ccc;
+        }
+        body {
+            margin: 0;
+            font-family: var(--font-family);
+            background-color: var(--main-bg-color);
+            color: var(--main-color);
+            text-align: center;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+            background-color: var(--main-bg-color);
+            animation: fadeIn 5s forwards;
+        }
+        .logo video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+        .logo img {
+            max-width: 60%; /* Taille du logo principal */
+            height: auto;
+            z-index: 1;
+        }
+        .arrow-down {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+        .arrow-down div {
+            width: 30px;
+            height: 30px;
+            border-left: 5px solid var(--arrow-color);
+            border-bottom: 5px solid var(--arrow-color);
+            transform: rotate(-45deg);
+            margin: 5px 0;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) rotate(-45deg);
+            }
+            40% {
+                transform: translateY(-10px) rotate(-45deg);
+            }
+            60% {
+                transform: translateY(-5px) rotate(-45deg);
+            }
+        }
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        .interlude {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: var(--main-bg-color);
+        }
+        .interlude video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+        .interlude img {
+            max-width: 60%; /* Taille du 2e logo */
+            height: auto;
+            position: absolute;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 10s;
+        }
+        .bottom-logos {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            display: flex;
+            gap: 10vw; /* Utilisation des unités relatives pour un meilleur ajustement */
+            opacity: 0;
+            transition: opacity 5s;
+        }
+        .bottom-logos img {
+            width: 12vw; /* Taille des boutons OUI et NON en unités relatives */
+            height: auto;
+            cursor: pointer;
+            animation: pulse 3s infinite;
+        }
+        @media (max-width: 600px) {
+            .logo img {
+                max-width: 70%; /* Taille du logo pour les petits écrans */
+            }
+            .arrow-down {
+                bottom: 90px; /* Remonter la flèche sur mobile */
+            }
+            .arrow-down div {
+                width: 20px;
+                height: 20px;
+                border-left: 3px solid var(--arrow-color);
+                border-bottom: 3px solid var(--arrow-color);
+            }
+            .bottom-logos img {
+                width: 135px; /* Taille des boutons OUI et NON pour les petits écrans */
+                height: auto;
+            }
+            .interlude img {
+                max-width: 90%; /* Taille du 2e logo pour les petits écrans */
+            }
+            .moveable-oui, .moveable-non {
+                top: -30px; /* Ajustement pour les petits écrans */
+            }
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        .moveable-oui {
+            position: relative;
+            top: -50px; /* Ajustez cette valeur pour déplacer l'image "oui" verticalement */
+        }
+        .moveable-non {
+            position: relative;
+            top: -50px; /* Ajustez cette valeur pour déplacer l'image "non" verticalement */
+        }
+        .hidden {
+            display: none;
+        }
+        .scream-container {
+            display: none; /* Masqué par défaut */
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 9999;
+        }
+        .scream-image {
+            max-width: 50%;
+            height: auto;
+        }
+        @media (max-width: 600px) {
+            .scream-image {
+                max-width: 110%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <video src="videos/fond_video.mp4" autoplay muted loop></video>
+        <img src="logos/logo.png" alt="Too Many Cooks. Studio">
+        <div class="arrow-down">
+            <div></div>
+        </div>
+    </div>
+    <div class="interlude" id="interlude">
+        <video src="videos/fondvideo2.mp4" muted loop></video>
+        <img src="logos/new_production.png" alt="Cliquez">
+    </div>
+    <div class="bottom-logos" id="bottom-logos">
+        <img src="logos/oui.png" alt="Oui" onclick="showScreamer()" class="moveable-oui">
+        <img src="logos/non.png" alt="Non" onclick="location.href='error.html'" class="moveable-non">
+    </div>
+    <div class="scream-container" id="scream-container">
+        <img src="images/scream.png" alt="Scream" class="scream-image" id="screamImage">
+        <audio id="screamAudio" src="sons/scream.mp3"></audio>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const interlude = document.getElementById('interlude');
+            const interludeObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const video = interlude.querySelector('video');
+                        video.play();
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            interludeObserver.observe(interlude);
+
+            let logoFadedIn = false;
+            const interludeLogo = document.querySelector('.interlude img');
+            const bottomLogos = document.getElementById('bottom-logos');
+
+            const fadeInLogos = () => {
+                if (!logoFadedIn) {
+                    interludeLogo.style.opacity = '1';
+                    logoFadedIn = true;
+
+                    setTimeout(() => {
+                        bottomLogos.style.opacity = '1';
+                    }, 6000);
+                }
+            };
+
+            window.addEventListener('scroll', fadeInLogos);
+            window.addEventListener('touchmove', fadeInLogos);
+        });
+
+        function showScreamer() {
+            const bottomLogos = document.getElementById('bottom-logos');
+            const screamContainer = document.getElementById('scream-container');
+            const screamAudio = document.getElementById('screamAudio');
+
+            // Masquer tout le contenu existant
+            document.body.style.backgroundColor = '#000';
+            document.querySelectorAll('body > :not(#scream-container)').forEach(el => el.style.display = 'none');
+
+            // Afficher le scream-container
+            screamContainer.style.display = 'flex';
+            screamAudio.volume = 0.3; // Réduire le volume de 70%
+            screamAudio.play();
+
+            setTimeout(() => {
+                window.location.href = 'faux_menu2.html';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="images/favicon_tmc_corp.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="images/favicon_tmc_corp.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TMC. Games</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: black;
+            color: white;
+        }
+        #gameContainer {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+        #intro {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #introLogo {
+            width: 250px;
+            height: auto;
+            animation: blink 3s infinite;
+            cursor: pointer;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.1; }
+            100% { opacity: 1; }
+        }
+        #logo {
+            width: 280px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        #studioLogo {
+            width: 600px;
+            height: auto;
+            margin-bottom: 100px;
+            pointer-events: none;
+        }
+        #commandsLogo {
+            width: 180px;
+            height: auto;
+            margin-top: 80px;
+            pointer-events: none;
+        }
+        canvas {
+            border: 1px solid white;
+        }
+        #controls {
+            margin-top: 20px;
+        }
+        button {
+            background-color: rgb(194, 194, 194);
+            color: black;
+            font-weight: bold;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+        #backgroundVideo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+        @media (max-width: 600px) {
+            #studioLogo {
+                width: 300px; /* Adjust the width for mobile devices */
+                margin-bottom: 50px; /* Adjust the bottom margin for mobile devices */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="intro">
+        <img src="logos/studio_games.png" alt="Studio Games" id="studioLogo">
+        <img src="logos/play.png" alt="Play" id="introLogo">
+        <img src="logos/commandes.png" alt="Commandes" id="commandsLogo">
+    </div>
+    <div id="gameContainer">
+        <video id="backgroundVideo" src="videos/fond_jeu.mp4" muted loop></video>
+        <img src="logos/space_cooks.png" alt="Space Cooks Logo" id="logo">
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div id="controls" style="display: none;">
+            <button onclick="location.reload()">Rejouer</button>
+            <button onclick="window.location.href='studios.html'">Accueil</button>
+        </div>
+        <audio id="backgroundMusic" src="sons/cooks.mp3" style="display: none;"></audio>
+    </div>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const intro = document.getElementById('intro');
+        const gameContainer = document.getElementById('gameContainer');
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const backgroundVideo = document.getElementById('backgroundVideo');
+
+        const spaceshipImage = new Image();
+        spaceshipImage.src = 'images/ship.png';
+        const alienImage = new Image();
+        alienImage.src = 'images/cooks.png';
+
+        const spaceship = {
+            x: canvas.width / 2 - 25,
+            y: canvas.height - 60,
+            width: 50,
+            height: 50,
+            speed: 5,
+            dx: 0,
+            lives: 3
+        };
+
+        let aliens = [];
+        const rows = 4;
+        const cols = 10;
+        const alienWidth = 40;
+        const alienHeight = 40;
+        const alienPadding = 10;
+        const alienOffsetTop = 30;
+        const alienOffsetLeft = 30;
+        const alienSpeed = 1;
+        let alienDirection = 1;
+
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+                aliens.push({
+                    x: j * (alienWidth + alienPadding) + alienOffsetLeft,
+                    y: i * (alienHeight + alienPadding) + alienOffsetTop,
+                    width: alienWidth,
+                    height: alienHeight,
+                    status: 1
+                });
+            }
+        }
+
+        let bullets = [];
+        let alienBullets = [];
+        let score = 0;
+        let gameOver = false;
+        let youWin = false;
+
+        function drawSpaceship() {
+            ctx.drawImage(spaceshipImage, spaceship.x, spaceship.y, spaceship.width, spaceship.height);
+        }
+
+        function drawAliens() {
+            aliens.forEach(alien => {
+                if (alien.status === 1) {
+                    ctx.drawImage(alienImage, alien.x, alien.y, alien.width, alien.height);
+                }
+            });
+        }
+
+        function drawBullets() {
+            bullets.forEach(bullet => {
+                ctx.fillStyle = 'red';
+                ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+            });
+
+            alienBullets.forEach(bullet => {
+                ctx.fillStyle = 'yellow';
+                ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+            });
+        }
+
+        function moveSpaceship() {
+            spaceship.x += spaceship.dx;
+            if (spaceship.x < 0) spaceship.x = 0;
+            if (spaceship.x + spaceship.width > canvas.width) spaceship.x = canvas.width - spaceship.width;
+        }
+
+        function moveBullets() {
+            bullets.forEach(bullet => {
+                bullet.y -= bullet.speed;
+            });
+            bullets = bullets.filter(bullet => bullet.y > 0);
+
+            alienBullets.forEach(bullet => {
+                bullet.y += bullet.speed;
+            });
+            alienBullets = alienBullets.filter(bullet => bullet.y < canvas.height);
+        }
+
+        function moveAliens() {
+            let edge = false;
+            aliens.forEach(alien => {
+                if (alien.status === 1) {
+                    alien.x += alienSpeed * alienDirection;
+                    if (alien.x + alien.width > canvas.width || alien.x < 0) {
+                        edge = true;
+                    }
+                }
+            });
+            if (edge) {
+                alienDirection *= -1;
+                aliens.forEach(alien => {
+                    alien.y += alienHeight;
+                });
+            }
+        }
+
+        function collisionDetection() {
+            bullets.forEach(bullet => {
+                aliens.forEach(alien => {
+                    if (alien.status === 1 &&
+                        bullet.x < alien.x + alien.width &&
+                        bullet.x + bullet.width > alien.x &&
+                        bullet.y < alien.y + alien.height &&
+                        bullet.y + bullet.height > alien.y) {
+                        alien.status = 0;
+                        bullet.y = -10;
+                        score += 10;
+                    }
+                });
+            });
+
+            alienBullets.forEach(bullet => {
+                if (bullet.x < spaceship.x + spaceship.width &&
+                    bullet.x + bullet.width > spaceship.x &&
+                    bullet.y < spaceship.y + spaceship.height &&
+                    bullet.y + bullet.height > spaceship.y) {
+                    spaceship.lives -= 1;
+                    bullet.y = canvas.height + 10;
+                    if (spaceship.lives === 0) {
+                        gameOver = true;
+                    }
+                }
+            });
+
+            aliens.forEach(alien => {
+                if (alien.status === 1 && (alien.y + alien.height >= canvas.height || (alien.x < spaceship.x + spaceship.width &&
+                    alien.x + alien.width > spaceship.x &&
+                    alien.y < spaceship.y + spaceship.height &&
+                    alien.y + alien.height > spaceship.y))) {
+                    gameOver = true;
+                }
+            });
+        }
+
+        function drawLives() {
+            ctx.font = '20px Arial';
+            ctx.fillStyle = 'white';
+            ctx.fillText('Vies : ' + spaceship.lives, 10, 40);
+        }
+
+        function drawScore() {
+            ctx.font = '20px Arial';
+            ctx.fillStyle = 'white';
+            ctx.fillText('Score : ' + score, 10, 20);
+        }
+
+        function drawGameOver() {
+            ctx.font = '40px Arial';
+            ctx.fillStyle = 'red';
+            ctx.fillText('GAME OVER', canvas.width / 2 - 100, canvas.height / 2);
+        }
+
+        function drawYouWin() {
+            ctx.font = '40px Arial';
+            ctx.fillStyle = 'green';
+            ctx.fillText('VICTOIRE', canvas.width / 2 - 100, canvas.height / 2);
+        }
+
+        function update() {
+            if (gameOver) {
+                drawGameOver();
+                document.getElementById('controls').style.display = 'block';
+                return;
+            }
+
+            if (aliens.every(alien => alien.status === 0)) {
+                youWin = true;
+                drawYouWin();
+                document.getElementById('controls').style.display = 'block';
+                return;
+            }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawSpaceship();
+            drawAliens();
+            drawBullets();
+            drawScore();
+            drawLives();
+            moveSpaceship();
+            moveBullets();
+            moveAliens();
+            collisionDetection();
+
+            if (Math.random() < 0.01) {
+                const activeAliens = aliens.filter(alien => alien.status === 1);
+                if (activeAliens.length > 0) {
+                    const shooter = activeAliens[Math.floor(Math.random() * activeAliens.length)];
+                    alienBullets.push({
+                        x: shooter.x + shooter.width / 2 - 2.5,
+                        y: shooter.y + shooter.height,
+                        width: 5,
+                        height: 10,
+                        speed: 3
+                    });
+                }
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'Right') {
+                spaceship.dx = spaceship.speed;
+            } else if (e.key === 'ArrowLeft' || e.key === 'Left') {
+                spaceship.dx = -spaceship.speed;
+            } else if (e.key === ' ' || e.key === 'Spacebar') {
+                bullets.push({
+                    x: spaceship.x + spaceship.width / 2 - 2.5,
+                    y: spaceship.y,
+                    width: 5,
+                    height: 10,
+                    speed: 7
+                });
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'Right' || e.key === 'ArrowLeft' || e.key === 'Left') {
+                spaceship.dx = 0;
+            }
+        });
+
+        function startGame() {
+            intro.style.display = 'none';
+            gameContainer.style.display = 'flex';
+            backgroundVideo.play();
+            backgroundMusic.play();
+            gameContainer.style.opacity = 1; // Fade in the game container
+            update();
+        }
+
+        const introLogo = document.getElementById('introLogo');
+        introLogo.onclick = startGame;
+
+        spaceshipImage.onload = () => {
+            alienImage.onload = () => {
+                introLogo.style.display = 'block';
+            };
+        };
+    </script>
+</body>
+</html>

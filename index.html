@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TMC. Corp</title>
+
+  <!-- SEO -->
+  <meta name="description" content="Too Many Cooks. Corporation — expériences immersives absurdes et orchestrées depuis 2020. Studios, Institute, timeline et archives.">
+
+  <!-- Favicon -->
+  <link href="images/favicon_tmc_corp.ico" rel="icon" type="image/x-icon"/>
+  <link href="images/favicon_tmc_corp.ico" rel="shortcut icon" type="image/x-icon"/>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Preload hero logo (au fold) -->
+  <link rel="preload" as="image" href="logos/new_accueil.png" imagesizes="(max-width: 720px) 82vw, 720px">
+
+  <!-- AOS (Animate On Scroll) -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet"/>
+
+  <style>
+    /* ===============  VARIABLES  =============== */
+    :root{
+      --bg-dark: #0f172a;   
+      --bg-dark-2:#0b1220;  
+      --text:#edf0f0;       
+      --muted:#edf0f0;      
+      --primary:#2563eb;    
+      --primary-hover:#1e40af;
+      --line:#9aa9c7;       
+      --glow:#38bdf8;       
+      --card-radius:14px;
+      --shadow:0 10px 28px rgba(2,8,23,0.35);
+      --title-w:clamp(220px, 32vw, 360px);  
+      --footer-logo-h: 96px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%;}
+    body{
+      margin:0;
+      font-family:'Sora',sans-serif;
+      background:var(--bg-dark);
+      color:var(--text);
+      text-align:center;
+      overflow-x:hidden;
+    }
+    img{max-width:100%;display:block}
+    a{color:inherit;text-decoration:none}
+
+    /* utilitaires a11y */
+    .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+    .focus-ring:focus-visible,
+    .discover-button:focus-visible,
+    .branch a:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+
+    /* ===============  HERO  =============== */
+    header{
+      position:relative;
+      min-height:100svh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      overflow:hidden;
+      margin-bottom:0;
+    }
+    .hero-video{
+      position:absolute;inset:0;
+      width:100%;height:100%;
+      object-fit:cover;
+      z-index:0;
+    }
+    .hero-overlay{
+      position:absolute;inset:0;
+      background:rgba(0,0,0,0.45);
+      z-index:1;
+    }
+    .hero-content{
+      position:relative;
+      z-index:2;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+    }
+    .hero-content img{
+      width:min(82vw, 720px);
+      animation:fadeIn 1.4s ease both;
+    }
+
+    /* Flèche (cliquable) */
+    .arrow-down{
+      position:absolute;bottom:36px;left:50%;transform:translateX(-50%);
+      z-index:3;display:inline-block
+    }
+    .arrow-down span{
+      display:block;width:26px;height:26px;
+      border-left:3px solid #fff;border-bottom:3px solid #fff;
+      transform:rotate(-45deg);margin:-6px auto;animation:bounce 2s infinite;
+      opacity:.9;
+    }
+    @keyframes bounce{
+      0%,20%,50%,80%,100%{transform:translateY(0) rotate(-45deg)}
+      40%{transform:translateY(-10px) rotate(-45deg)}
+      60%{transform:translateY(-4px) rotate(-45deg)}
+    }
+
+    /* ===============  INTRO  =============== */
+    .intro{
+      padding:48px 20px 56px;
+      max-width:880px;margin:0 auto;
+      line-height:1.6;color:var(--muted);
+      position:relative;
+      scroll-margin-top:8px;
+    }
+    .intro p{
+      margin:6px 0;
+      text-wrap:balance;
+      font-size:18px;
+      line-height:1.6;
+      letter-spacing:0.01em;
+      text-align:center;
+    }
+    .intro::after{
+      content:"";
+      position:absolute;
+      left:50%;
+      bottom:0;
+      transform:translateX(-50%);
+      width:60%;
+      height:2px;
+      background:linear-gradient(90deg,transparent,var(--glow),transparent);
+      box-shadow:0 0 10px var(--glow);
+    }
+
+    /* ===============  TITRES SECTIONS  =============== */
+    .section-logo{
+      width:var(--title-w);
+      margin:12px auto 20px;
+      filter:drop-shadow(0 10px 25px rgba(0,0,0,0.25));
+    }
+
+    /* ======= Réglage SIMPLE des séparateurs de sections ======= */
+    .branches  .section-logo{ width: clamp(280px, 36vw, 420px); }
+    .timeline  .section-logo{ width: clamp(260px, 34vw, 400px); }
+    .direction .section-logo{ width: clamp(260px, 34vw, 380px); }
+    .about     .section-logo{ width: clamp(260px, 34vw, 380px); }
+
+    /* ===============  CREATIONS  =============== */
+    section.branches {
+      position: relative;
+      padding: 60px 20px 74px;
+      background:
+        radial-gradient(ellipse 63% 50% at 50% 63%, 
+          rgba(255,255,255,0.06), rgba(255,255,255,0) 55%),
+        var(--bg-dark);
+    }
+    .branch-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 58px;
+      justify-content: center;
+      align-items: center;
+    }
+    .branch {
+      width: 360px;
+      height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .branch img {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+      transition: transform .25s ease, filter .25s ease, box-shadow .25s ease;
+      filter: drop-shadow(0 4px 14px rgba(0,0,0,.35)) brightness(.98);
+    }
+    .branch img:hover {
+      transform: translateY(-3px) scale(1.06);
+      filter: drop-shadow(0 8px 26px rgba(56,189,248,.35)) brightness(1.04) contrast(1.02);
+    }
+
+    /* ===============  TIMELINE  =============== */
+    section.timeline{padding:64px 18px 80px}
+    .timeline-container{position:relative;max-width:980px;margin:0 auto}
+    .timeline-line{
+      position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);
+      width:4px;border-radius:4px;
+      background:linear-gradient(180deg, var(--primary), var(--glow));
+      opacity:.9;filter:drop-shadow(0 0 10px rgba(56,189,248,0.35));
+    }
+    .timeline-item{
+      position:relative;width:50%;margin:44px 0;
+      padding:22px 24px;background:var(--bg-dark-2);
+      border:1px solid rgba(148,163,184,0.18);
+      color:var(--text);text-align:left;border-radius:var(--card-radius);
+      box-shadow:var(--shadow);
+    }
+    .timeline-item h3{
+      margin:0 0 10px;font-weight:600;text-align:center
+    }
+    .timeline-item p{
+      margin:0;color:var(--muted);
+      text-align: justify;
+      text-align-last: left;
+      hyphens: auto;
+      -webkit-hyphens: auto;
+      -ms-hyphens: auto;
+      overflow-wrap: break-word;
+      word-break: normal;
+      text-wrap: pretty;
+    }
+    .timeline-item.left{left:0}
+    .timeline-item.right{left:50%}
+    .timeline-item.left::before,
+    .timeline-item.right::before{
+      content:"";position:absolute;top:28px;width:14px;height:14px;border-radius:50%;
+      background:radial-gradient(circle at 35% 35%, #fff, var(--glow) 55%);
+      box-shadow:0 0 0 6px rgba(56,189,248,0.18), 0 0 18px rgba(56,189,248,0.55);
+    }
+    .timeline-item.left::before{right:-7px}
+    .timeline-item.right::before{left:-7px}
+    .t-ico{font-size:1.2em;display:block;margin-bottom:6px;text-align:center}
+
+    @media (max-width: 860px){
+      .timeline-item,
+      .timeline-item.left,
+      .timeline-item.right{
+        width:92%;left:50%!important;transform:translateX(-50%);
+      }
+      .timeline-item::before{left:-7px !important; right:auto !important;}
+      .timeline-line{left:16px; transform:none;}
+    }
+
+    /* ===============  DIRECTION  =============== */
+    section.direction{padding:64px 18px 80px}
+    .team-photos{
+      display:flex;justify-content:center;align-items:flex-start;flex-wrap:wrap;gap:40px;margin-top:20px;
+    }
+    .team-member{text-align:center;width:200px}
+    .team-photos img{
+      width:200px;height:200px;object-fit:cover;
+      border-radius:12px;
+      border:3px solid var(--primary);
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .team-photos img:hover{
+      transform:scale(1.06);
+      box-shadow:0 0 20px var(--glow);
+    }
+    .team-photos .caption{
+      font-size:18px;margin-top:10px;color:var(--text);font-weight:bold;
+      min-height:55px;
+    }
+    .team-photos .caption em{
+      font-size:14px;font-weight:normal;display:block;margin-top:4px;color:var(--muted);
+    }
+
+    .discover-button{
+      display:inline-block;margin-top:22px;
+      padding:12px 22px;border-radius:10px;
+      background:var(--primary);color:#fff;font-weight:600;
+      box-shadow:0 8px 22px rgba(37,99,235,0.25);
+      transition:transform .2s ease, background .2s ease, box-shadow .2s ease;
+    }
+    .discover-button:hover{
+      background:var(--primary-hover);
+      transform:translateY(-2px);
+      box-shadow:0 10px 28px rgba(30,64,175,0.35);
+    }
+
+    /* ===============  A PROPOS  =============== */
+    section.about{
+      padding: 80px 18px 96px;
+    }
+    section.about p{
+      max-width: 160ch;
+      margin: 10px auto;
+      font-size: 18px;
+      line-height: 1.6;
+      letter-spacing: 0.01em;
+      text-align: center;
+      color: var(--muted);
+      text-wrap: balance;
+      hyphens: none;
+    }
+
+    /* ===============  FOOTER  =============== */
+    footer{
+      padding:28px 14px 38px;
+      border-top:1px solid rgba(148,163,184,0.16);
+      position:relative;
+    }
+    footer::before{
+      content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);
+      width:60%;height:2px;background:linear-gradient(90deg,transparent,var(--glow),transparent);
+      box-shadow:0 0 10px var(--glow);
+    }
+    .footer-logos{
+      display:flex;gap:28px;justify-content:center;align-items:center;flex-wrap:wrap;
+    }
+
+    /* Footer – base */
+    .footer-logo-box{
+      width: clamp(220px, 24vw, 300px);
+      height: clamp(110px, 12vw, 150px);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:4px 6px;
+      filter:drop-shadow(0 3px 10px rgba(0,0,0,0.35));
+      flex:0 1 auto;
+    }
+    .footer-logo-box img{
+      max-width:100%;
+      max-height:100%;
+      object-fit:contain;
+      display:block;
+    }
+    .footer-logos .footer-logo-box:nth-child(1) img{ transform:scale(1.06); }
+    .footer-logos .footer-logo-box:nth-child(2) img{ transform:scale(0.96); }
+
+    /* =========================
+       MOBILE FIXES (<= 480px)
+       ========================= */
+    @media (max-width: 480px){
+
+      /* 1) Nos créations – tuiles centrées et à la bonne taille */
+      .branch-list{ gap: 28px; justify-content: center; }
+      .branch{
+        width: clamp(220px, 72vw, 300px);
+        height: clamp(220px, 72vw, 300px);
+        margin-inline: auto;
+      }
+      .branch a{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%; height: 100%;
+      }
+      .branch img{ max-width: 92%; max-height: 92%; margin: 0 auto; }
+
+      /* 2) Timeline – alignée à gauche, pas de coupe */
+      .timeline-container{ 
+        --tl-gutter: 32px;      /* espace réservé à la ligne + pastille */
+        padding-inline: 10px;
+      }
+      .timeline-line{ left: var(--tl-gutter); }
+      .timeline-item,
+      .timeline-item.left,
+      .timeline-item.right{
+        left: 0 !important;
+        transform: none !important;
+        margin-left: calc(var(--tl-gutter) + 8px);
+        width: calc(100% - (var(--tl-gutter) + 8px));
+        padding: 18px;
+      }
+      .timeline-item::before{
+        left: calc(-1 * (var(--tl-gutter) - 8px)) !important;
+        right: auto !important;
+      }
+
+      /* 3) Footer – logos plus grands sur mobile */
+      .footer-logos{ gap: 16px; }
+      .footer-logo-box{
+        width: min(88vw, 360px);
+        height: clamp(100px, 26vw, 140px);
+        padding: 4px 6px;
+      }
+      .footer-logo-box img{ max-width: 100%; max-height: 100%; }
+      .footer-logos .footer-logo-box:nth-child(1) img{ transform: scale(1.08); }
+      .footer-logos .footer-logo-box:nth-child(2) img{ transform: scale(0.98); }
+    }
+
+    /* Écrans moyens : petit ajustement optionnel */
+    @media (min-width: 481px) and (max-width: 640px){
+      .branch{ width: clamp(260px, 58vw, 320px); height: clamp(260px, 58vw, 320px); }
+      .footer-logo-box{ width: min(82vw, 400px); height: clamp(110px, 24vw, 150px); }
+    }
+
+    /* ===== Desktop footer logos – tes valeurs “nickel” ===== */
+    @media (min-width:1124px){
+      .footer-logos{ gap: 32px; }
+      .footer-logos .footer-logo-box{
+        width:520px; 
+        height:60px;   /* tu peux mettre 140px si tu veux plus haut */
+        flex:0 0 auto;
+      }
+      .footer-logos .footer-logo-box img{ transform:none; }
+      .footer-logos .footer-logo-box:nth-child(1) img{ transform:scale(1.06); }
+      .footer-logos .footer-logo-box:nth-child(2) img{ transform:scale(0.96); }
+    }
+
+    @keyframes fadeIn{from{opacity:0;transform:scale(.98)} to{opacity:1;transform:scale(1)}}
+
+    /* ===============  Reduced motion  =============== */
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none !important; transition:none !important; scroll-behavior:auto !important;}
+      .hero-video{display:none;}
+    }
+  </style>
+</head>
+<body>
+
+  <main id="main">
+    <h1 class="sr-only">Too Many Cooks. Corporation — Pionniers du non-sens (depuis 2020)</h1>
+
+    <!-- HERO -->
+    <header>
+      <video autoplay muted loop playsinline preload="metadata" poster="images/hero_poster.jpg" class="hero-video" aria-hidden="true">
+        <source src="videos/new_accueil.mp4" type="video/mp4">
+        Votre navigateur ne supporte pas la vidéo HTML5.
+      </video>
+      <div class="hero-overlay"></div>
+      <div class="hero-content" data-aos="zoom-in" data-aos-duration="900">
+        <img src="logos/new_accueil.png" alt="Too Many Cooks Corp">
+      </div>
+      <a href="#intro" class="arrow-down focus-ring" aria-label="Faire défiler vers l’intro"><span></span></a>
+    </header>
+
+    <!-- INTRO -->
+    <section class="intro" id="intro" data-aos="fade-up" data-aos-offset="80">
+      <h2 class="sr-only">Introduction</h2>
+      <p><strong>Bienvenue chez Too Many Cooks. Corporation</strong></p>
+      <p>Pionniers du non-sens depuis 2020</p>
+      <p>Découvrez nos œuvres maison, fruits d’un chaos parfaitement maîtrisé</p>
+    </section>
+
+    <!-- CREATIONS -->
+    <section class="branches" id="branches" aria-label="Nos créations">
+      <h2 class="sr-only">Nos créations</h2>
+      <img src="logos/creations.png" alt="Nos Créations" class="section-logo" loading="lazy" decoding="async" data-aos="fade-up"/>
+      <div class="branch-list" data-aos="zoom-in" data-aos-delay="150">
+        <div class="branch">
+          <a class="focus-ring" href="studios.html" aria-label="Aller vers Too Many Cooks. Studios">
+            <img src="logos/logo.png" alt="Too Many Cooks. Studios" loading="lazy" decoding="async">
+          </a>
+        </div>
+        <div class="branch">
+          <a class="focus-ring" href="institute.html" aria-label="Aller vers Too Many Cooks. Institute">
+            <img src="logos/logoInstitute.png" alt="Too Many Cooks. Institute" loading="lazy" decoding="async">
+          </a>
+        </div>
+        <div class="branch">
+          <a class="focus-ring" href="https://rickrolled.fr/" target="_blank" rel="noopener noreferrer" aria-label="Aller vers l'inconnu">
+            <img src="logos/project_2026.png" alt="Projet 2026 (teaser)" loading="lazy" decoding="async">
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- TIMELINE -->
+    <section class="timeline" aria-label="Notre Histoire">
+      <h2 class="sr-only">Notre histoire</h2>
+      <img src="logos/histoire.png" alt="Notre Histoire" class="section-logo" loading="lazy" decoding="async" data-aos="fade-up"/>
+      <div class="timeline-container">
+        <div class="timeline-line" aria-hidden="true"></div>
+        <div class="timeline-item left" data-aos="fade-right" data-aos-duration="700">
+          <h3><span class="t-ico">🌱</span>2020 – Fondation</h3>
+          <p>Naissance de TMC Corp. Un simple week-end qui dérape devient la genèse d’une organisation appelée à transformer l’ordinaire en chaos organisé.</p>
+        </div>
+        <div class="timeline-item right" data-aos="fade-left" data-aos-duration="700">
+          <h3><span class="t-ico">😷</span>2021 – Pause forcée</h3>
+          <p>Une année marquée par le Covid. Les opérations se poursuivent à distance, avec des innovations discutables comme l’apéro stratégique en visioconférence.</p>
+        </div>
+        <div class="timeline-item left" data-aos="fade-right" data-aos-duration="700">
+          <h3><span class="t-ico">📈</span>2022/2023 – Expansion</h3>
+          <p>La Corpo reprend son développement. Les brainstormings deviennent incontrôlables, mais posent les bases d’une croissance assumée et démesurée.</p>
+        </div>
+        <div class="timeline-item right" data-aos="fade-left" data-aos-duration="700">
+          <h3><span class="t-ico">🎬</span>2024 – Too Many Cooks. Studios</h3>
+          <p>Création du Too Many Cooks. Studios, une branche dédiée au cinéma… sans films. Production d’affiches, fausses campagnes et site officiel : le succès est total, du moins selon nos propres chiffres.</p>
+        </div>
+        <div class="timeline-item left" data-aos="fade-right" data-aos-duration="700">
+          <h3><span class="t-ico">🧘</span>2025 – Too Many Cooks. Institute</h3>
+          <p>Lancement du Too Many Cooks. Institute, un centre de bien-être unique, où chaque soin est conçu pour relaxer… ou déstabiliser. Nouvelle étape dans la diversification stratégique de la Corpo.</p>
+        </div>
+        <div class="timeline-item right" data-aos="fade-left" data-aos-duration="700">
+          <h3><span class="t-ico">🔮</span>2026 – Notre avenir</h3>
+          <p>Un projet international est en cours de préparation. Les détails restent confidentiels, classés au plus haut niveau de sécurité interne.</p>
+        </div>
+        <div class="timeline-item left" data-aos="fade-right" data-aos-duration="700">
+          <h3><span class="t-ico">🚀</span>2050 – Conquête de l’univers</h3>
+          <p>Selon les plans de notre CEO Mimi, TMC Corp. s’étendra au-delà des frontières terrestres. Objectif : devenir la première multinationale intergalactique du divertissement et du bien-être.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIRECTION -->
+    <section class="direction" aria-label="Direction">
+      <h2 class="sr-only">Direction</h2>
+      <img src="logos/direction.png" alt="Direction" class="section-logo" loading="lazy" decoding="async" data-aos="fade-up"/>
+      <div class="team-photos">
+        <div class="team-member">
+          <img src="images/mimi6.jpg" alt="Mimi" width="200" height="200" loading="lazy" decoding="async">
+          <div class="caption">Mimi<br/><em>Founder and Chief Executive Officer</em></div>
+        </div>
+        <div class="team-member">
+          <img src="images/barnabe2.jpg" alt="Barnabé" width="200" height="200" loading="lazy" decoding="async">
+          <div class="caption">Barnabé<br/><em>Chief Product and Innovation Officer</em></div>
+        </div>
+        <div class="team-member">
+          <img src="images/volanges2.jpg" alt="Volanges" width="200" height="200" loading="lazy" decoding="async">
+          <div class="caption">Volanges<br/><em>Chief People and Happiness Officer</em></div>
+        </div>
+        <div class="team-member">
+          <img src="images/dave2.jpg" alt="Uncle Ben’s" width="200" height="200" loading="lazy" decoding="async">
+          <div class="caption">Uncle Ben’s<br/><em>Chief Financial and Control Officer</em></div>
+        </div>
+        <div class="team-member">
+          <img src="images/tchibayoult2.jpg" alt="Uncle Tchibayoult" width="200" height="200" loading="lazy" decoding="async">
+          <div class="caption">Uncle Tchibayoult<br/><em>Chief Information and Security Officer</em></div>
+        </div>
+      </div>
+      <a href="galerie.html" class="discover-button focus-ring" data-aos="zoom-in" data-aos-delay="200">Archives confidentielles</a>
+    </section>
+
+    <!-- A PROPOS -->
+    <section class="about" aria-label="Infos et Contact">
+      <h2 class="sr-only">Infos et contact</h2>
+      <img src="logos/infos.png" alt="Infos et Contact" class="section-logo" loading="lazy" decoding="async" data-aos="fade-up"/>
+      <p data-aos="fade-up" data-aos-delay="100">Too Many Cooks. Corporation transforme l’ordinaire en expériences orchestrées où l’improbable devient une&nbsp;tradition.</p>
+      <p data-aos="fade-up" data-aos-delay="120">Aujourd’hui, elle conçoit des aventures toujours plus absurdes — entre fiction, immersion et chaos organisé.</p>
+      <p data-aos="fade-up" data-aos-delay="140">Le tout garanti inoubliable… mais jamais remboursable.</p>
+      <a href="a_propos.html" class="discover-button focus-ring" data-aos="zoom-in" data-aos-delay="200">Plus de détails et nous contacter</a>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logos" data-aos="fade-up">
+      <a class="focus-ring footer-logo-box" href="https://www.instagram.com/too.many.cooks.corp/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <img src="logos/reseaux.png" alt="Instagram" loading="lazy" decoding="async">
+      </a>
+      <a class="focus-ring footer-logo-box" href="https://www.youtube.com/watch?v=QrGrOK8oZG8" target="_blank" rel="noopener noreferrer" aria-label="Crédits">
+        <img src="logos/tmc_corp_credits.png" alt="Crédits TMC Corp" loading="lazy" decoding="async">
+      </a>
+    </div>
+  </footer>
+
+  <!-- AOS -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    AOS.init(reduce ? { disable: true } : { once:true, offset:60, duration:650, easing:'ease-out-cubic' });
+  </script>
+</body>
+</html>

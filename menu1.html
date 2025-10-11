@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Too Many Cooks 1.0</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial, sans-serif';
+            background-color: #f0f0f0;
+            color: #333;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .video-container {
+            width: 64%; /* Revenir à la largeur de 64% */
+            max-width: 574px; /* Ajuster la largeur maximale */
+        }
+        video {
+            width: 100%;
+            height: auto;
+            display: block; /* Assurer que la vidéo est en mode bloc pour éviter les marges */
+        }
+        .button-container {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px; /* Espace entre les boutons */
+        }
+        .download-button, .home-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            display: none; /* Cacher les boutons initialement */
+            text-decoration: none; /* Enlever le soulignement */
+            font-weight: bold; /* Mettre le texte en gras */
+        }
+        .download-button:hover, .home-button:hover {
+            background-color: #444;
+        }
+        @media (max-width: 600px) {
+            .video-container {
+                width: 100%;
+                max-width: 520px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <video autoplay muted onended="showButtons()">
+            <source src="videos/Affiche_Menu_Too_Many_Cooks_1.0.mp4" type="video/mp4">
+            Votre navigateur ne supporte pas la balise vidéo.
+        </video>
+    </div>
+    <div class="button-container" id="buttonContainer">
+        <a href="PDF/Menu_Too_Many_Cooks_1.0.pdf" class="download-button" id="downloadButton" download>Télécharger en PDF</a>
+        <a href="studios.html" class="home-button" id="homeButton">Accueil</a>
+    </div>
+
+    <script>
+        // Fonction pour afficher les boutons après la fin de la vidéo
+        function showButtons() {
+            document.getElementById('downloadButton').style.display = 'block';
+            document.getElementById('homeButton').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

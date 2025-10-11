@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAPTCHA</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            background: url('fonds/fond1.webp') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px; /* Added padding for better text visibility */
+            box-sizing: border-box;
+        }
+        .question-container {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 90%;
+        }
+        .captcha-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+            justify-items: center; /* Center the images horizontally */
+        }
+        .captcha-container img {
+            width: 100%;
+            height: auto;
+            max-width: 150px;
+            max-height: 150px;
+            cursor: pointer;
+            border: 4px solid transparent;
+        }
+        .captcha-container img.selected {
+            border: 4px solid #007BFF;
+        }
+        .answer-container {
+            margin-top: 20px;
+        }
+        .validation {
+            color: lightgreen;
+            margin-top: 20px; /* Add space between button and validation message */
+        }
+        @media (max-width: 600px) {
+            .captcha-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .captcha-container img {
+                max-width: 120px;
+                max-height: 120px;
+            }
+            .question-container {
+                padding: 10px;
+            }
+            h1 {
+                font-size: 1.2em; /* Reduce text size for mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+    <audio id="background-audio" src="sons/Josephine.mp3"></audio>
+
+    <div class="question-container">
+        <h1>Tout d'abord, nous devons nous assurer que vous n'êtes pas un robot : complétez le Captcha.</h1>
+        <p>Cliquez sur toutes les images contenant un fraudeur ou une fraudeuse fiscal :<p>       
+        <div class="captcha-container" id="captcha-container">
+            <img src="images/fraudeur1.jpg" alt="Fraudeur 1" onclick="handleImageClick(this)">
+            <img src="images/mimi1.jpg" alt="Mimi 1" onclick="handleImageClick(this)">
+            <img src="images/fraudeur2.jpg" alt="Fraudeur 2" onclick="handleImageClick(this)">
+            <img src="images/mimi2.jpg" alt="Mimi 2" onclick="handleImageClick(this)">
+            <img src="images/fraudeur3.jpg" alt="Fraudeur 3" onclick="handleImageClick(this)">
+            <img src="images/mimi3.jpg" alt="Mimi 3" onclick="handleImageClick(this)">
+            <img src="images/fraudeur4.jpg" alt="Fraudeur 4" onclick="handleImageClick(this)">
+            <img src="images/mimi4.jpg" alt="Mimi 4" onclick="handleImageClick(this)">
+            <img src="images/fraudeur5.jpg" alt="Fraudeur 5" onclick="handleImageClick(this)">
+            <img src="images/mimi5.jpg" alt="Mimi 5" onclick="handleImageClick(this)">
+        </div>
+        <div class="answer-container">
+            <button onclick="checkCaptcha()">Valider</button>
+            <div id="validation" class="validation"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var container = document.getElementById('captcha-container');
+            for (var i = container.children.length; i >= 0; i--) {
+                container.appendChild(container.children[Math.random() * i | 0]);
+            }
+        });
+
+        const correctImages = ["fraudeur1.jpg", "fraudeur2.jpg", "fraudeur3.jpg", "fraudeur4.jpg", "fraudeur5.jpg"];
+
+        function handleImageClick(img) {
+            img.classList.toggle("selected");
+            var audio = document.getElementById('background-audio');
+            audio.play();
+        }
+
+        function checkCaptcha() {
+            const selectedImages = document.querySelectorAll(".captcha-container img.selected");
+            const selectedImageSources = Array.from(selectedImages).map(img => img.src.split('/').pop());
+
+            const allCorrect = selectedImageSources.every(src => correctImages.includes(src));
+            const allSelected = selectedImageSources.length === correctImages.length;
+
+            if (allCorrect && allSelected) {
+                document.getElementById('validation').textContent = "Captcha validé ! Merci de patienter...";
+                setTimeout(() => {
+                    location.href = 'enigme2.html';
+                }, 2000);
+            } else {
+                document.getElementById('validation').textContent = "Captcha incorrect. Réessayez.";
+            }
+        }
+    </script>
+</body>
+</html>

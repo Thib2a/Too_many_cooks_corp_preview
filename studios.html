@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<link href="images/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TMC. Studios</title>
+<style>
+        :root {
+            --main-bg-color: #f0f0f0;
+            --main-color: #333;
+            --font-family: 'Arial, sans-serif';
+            --arrow-color: #ccc;
+            --team-logo-size: 300px;
+            --team-company-gap: 50px;
+            --info-partners-gap: 50px;
+            --team-info-gap: 100px;
+        }
+        body {
+            margin: 0;
+            font-family: var(--font-family);
+            background-color: var(--main-bg-color);
+            color: var(--main-color);
+            text-align: center;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+            background-color: var(--main-bg-color);
+            animation: fadeIn 5s forwards;
+        }
+        .logo video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+        .logo img {
+            max-width: 60%;
+            height: auto;
+            z-index: 1;
+        }
+        .arrow-down {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+        .arrow-down div {
+            width: 30px;
+            height: 30px;
+            border-left: 5px solid var(--arrow-color);
+            border-bottom: 5px solid var(--arrow-color);
+            transform: rotate(-45deg);
+            margin: 5px 0;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) rotate(-45deg);
+            }
+            40% {
+                transform: translateY(-10px) rotate(-45deg);
+            }
+            60% {
+                transform: translateY(-5px) rotate(-45deg);
+            }
+        }
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        @keyframes bounceLogo1 {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-10px);
+            }
+        }
+        @keyframes bounceLogo2 {
+            0% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        @keyframes inversePulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        @keyframes scroll {
+            0% {
+                transform: translateX(74%);
+            }
+            100% {
+                transform: translateX(-74%);
+            }
+        }
+        @media (max-width: 600px) {
+            .logo img {
+                max-width: 70%;
+            }
+            .arrow-down {
+                bottom: 90px;
+            }
+            .arrow-down div {
+                width: 20px;
+                height: 20px;
+                border-left: 3px solid var(--arrow-color);
+                border-bottom: 3px solid var(--arrow-color);
+            }
+            .partners-logos-container {
+                padding: 0; /* Supprime les marges pour les petits écrans */
+            }
+        }
+        .content {
+            padding: 20px;
+            background-color: var(--main-bg-color);
+            flex: 1;
+        }
+        .spacer {
+            margin: 40px 0;
+        }
+        .posters {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+        .posters img {
+            width: 100%;
+            max-width: 524px;
+            height: auto;
+            border: 5px solid var(--main-color);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: pulse 3s infinite;
+        }
+        .posters img:hover, .posters img:active {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+        }
+        .studio-productions, .our-partners, .our-team {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-color: var(--main-bg-color);
+        }
+        .studio-productions img, .our-team img {
+            width: 24%;
+            height: auto;
+            cursor: default;
+            pointer-events: none;
+        }
+        .our-partners img {
+            width: 16%;
+            height: auto;
+            cursor: default;
+            pointer-events: none;
+        }
+        .team-photos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-top: 20px;
+        }
+        .team-member {
+            text-align: center;
+            position: relative;
+        }
+        .team-photos img {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            border: 5px solid var(--main-color);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+        }
+        .team-photos .caption {
+            font-size: 20px;
+            margin-top: 10px;
+            color: var(--main-color);
+            font-weight: bold;
+        }
+        .team-photos .caption em {
+            font-size: 16px;
+            font-weight: normal;
+            display: block;
+            margin-top: 4px;
+        }
+        .partners-logos-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            overflow: hidden;
+            background-color: var(--main-bg-color);
+        }
+        .partners-logos {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            animation: scroll 22s linear infinite;
+        }
+        .partners-logos:hover {
+            animation-play-state: paused;
+        }
+        .partners-logos img {
+            height: auto;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .partners-logos img:hover {
+            transform: scale(1.1);
+        }
+        @media (max-width: 600px) {
+            .partners-logos img {
+                animation: inversePulse 2s infinite; /* Animation pour mobile */
+            }
+        }
+        .partner1 {
+            max-width: 240px;
+        }
+        .partner2 {
+            max-width: 380px;
+        }
+        .partner3 {
+            max-width: 150px;
+        }
+        .partner4 {
+            max-width: 360px;
+        }
+        .partner5 {
+            max-width: 200px;
+        }
+        .footer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-color: var(--main-bg-color);
+        }
+        .corner-logo.reseaux {
+            width: 343px;
+            height: auto;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            animation: bounceLogo1 8s infinite;
+        }
+        .corner-logo.droits {
+            width: 300px;
+            height: auto;
+            cursor: default;
+            transition: none;
+        }
+        .info-logo {
+            width: var(--team-logo-size);
+            height: auto;
+            cursor: pointer;
+            transition: transform 0.3s ease, animation 0.3s ease;
+            margin-top: 80px;
+        }
+        .info-logo.logo1 {
+            animation: bounceLogo1 1s infinite alternate;
+        }
+        .info-logo.logo2 {
+            animation: bounceLogo2 1s infinite alternate;
+        }
+        .info-logo:hover {
+            transform: scale(1.6);
+        }
+        .our-partners {
+            margin-top: var(--info-partners-gap);
+        }
+        @media (max-width: 600px) {
+            .posters img {
+                max-width: 70%;
+            }
+            .studio-productions img, .our-partners img, .our-team img {
+                width: 65%;
+            }
+            .corner-logo.reseaux {
+                width: 70%;
+            }
+            .corner-logo.droits {
+                width: 70%;
+            }
+            .info-logo {
+                width: 70%;
+                margin-top: 20px;
+            }
+            .discover-logos {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+                margin-top: var(--team-info-gap);
+            }
+            .partners-logos {
+                animation: scroll 10s linear infinite; /* Réduction de la durée de l'animation pour mobile */
+            }
+        }
+        #hiddenShip {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="logo">
+<video autoplay="" id="introVideo" loop="" muted="" playsinline=""></video>
+<img alt="Too Many Cooks. Studio" src="logos/logo.png"/>
+<div class="arrow-down">
+  <div></div>
+</div>
+
+</div>
+</div>
+<div class="content">
+<div class="studio-productions">
+<img alt="Studio Productions" src="logos/studio_productions.webp"/>
+</div>
+<div class="spacer" style="margin-bottom: 5%;"></div>
+<div class="posters">
+<img alt="Film Poster 1" aria-label="Film Poster 1 (cliquable)" onclick="location.href='menu1.html'" role="button" src="fonds/poster1.webp"/>
+<img alt="Film Poster 2" aria-label="Film Poster 2 (cliquable)" onclick="location.href='vrai_menu2.html'" role="button" src="fonds/poster2.webp"/>
+<img alt="Film Poster 3" aria-label="Film Poster 3 (cliquable)" onclick="location.href='institute.html'" role="button" src="fonds/poster3.webp"/>
+</div>
+<div class="spacer"></div>
+<div class="our-team">
+<img alt="Our Team" src="logos/our_team.png"/>
+</div>
+<div class="team-photos">
+<div class="team-member">
+<img alt="Mimi" src="images/mimi.png" tabindex="0"/>
+<div class="caption">Mimi<br/><em>Executive Producer</em></div>
+</div>
+<div class="team-member">
+<img alt="Uncle Tchibayoult" src="images/tchibayoult.png" tabindex="0"/>
+<div class="caption">Uncle Tchibayoult<br/><em>Film Director</em></div>
+</div>
+<div class="team-member">
+<img alt="Uncle Bens" src="images/dave.png" tabindex="0"/>
+<div class="caption">Uncle Ben's<br/><em>Screenwriter & Lore Master</em></div>
+</div>
+<div class="team-member">
+<img alt="Volanges" src="images/volanges.png" tabindex="0"/>
+<div class="caption">Volanges<br/><em>Head of Production Design</em></div>
+</div>
+<div class="team-member">
+<img alt="Barnabe" src="images/barnabe.png" tabindex="0"/>
+<div class="caption">Barnabé<br/><em>Special Effects Supervisor</em></div>
+</div>
+</div>
+<div class="spacer"></div>
+<div class="discover-logos">
+<img alt="The Company" aria-label="The Company (cliquable)" class="info-logo logo1" onclick="location.href='a_propos.html'" role="button" src="logos/the_company.png"/>
+<img alt="The Team" aria-label="The Team (cliquable)" class="info-logo logo2" onclick="location.href='galerie.html'" role="button" src="logos/the_team.png"/>
+</div>
+<div class="spacer"></div>
+<div class="our-partners">
+<img alt="Our Partners" src="logos/our_partners.png"/>
+</div>
+<div class="partners-logos-container">
+<div class="partners-logos" id="partnersLogos">
+<a href="https://www.the-escapers.com/profil/too-many-cooks-corp" rel="noopener noreferrer" target="_blank">
+<img alt="Partenaire 1" class="partner1" src="logos/partenaire1.webp"/>
+</a>
+<a href="https://fr.bensoriginal.com/" rel="noopener noreferrer" target="_blank">
+<img alt="Partenaire 2" class="partner2" src="logos/partenaire2.webp"/>
+</a>
+<a href="https://www.escapegame.fr/profil/Too-Many-Cooks-Corp/" rel="noopener noreferrer" target="_blank">
+<img alt="Partenaire 3" class="partner3" src="logos/partenaire4.webp"/>
+</a>
+<a href="https://www.youtube.com/watch?v=QrGrOK8oZG8" rel="noopener noreferrer" target="_blank">
+<img alt="Partenaire 4" class="partner4" src="logos/partenaire3.webp"/>
+</a>
+<a href="https://www.secretcinema.com/" rel="noopener noreferrer" target="_blank">
+<img alt="Partenaire 5" class="partner5" src="logos/partenaire5.png"/>
+</a>
+</div>
+</div>
+</div>
+<div class="footer">
+<img alt="Image reseaux" aria-label="Image reseaux (cliquable)" class="corner-logo reseaux" onclick="window.open('https://www.instagram.com/too.many.cooks.corp/', '_blank')" role="button" src="logos/reseaux.png"/>
+<img alt="Droits réservé" class="corner-logo droits" src="logos/droits.png"/>
+</div>
+<img alt="Hidden Ship" id="hiddenShip" src="images/ship2.png"/>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const videoSources = [
+                'videos/accueil-studios-1.mp4',
+                'videos/accueil-studios-2.mp4',
+            ];
+            const introVideo = document.getElementById('introVideo');
+            const randomIndex = Math.floor(Math.random() * videoSources.length);
+            introVideo.src = videoSources[randomIndex];
+            introVideo.play();
+
+            const posters = document.querySelectorAll('.posters img');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, {
+                threshold: 0.5
+            });
+
+            posters.forEach(poster => observer.observe(poster));
+
+            const ship = document.getElementById('hiddenShip');
+
+            function getRandomPosition() {
+                const x = Math.random() * (document.body.scrollWidth - ship.clientWidth);
+                const y = Math.random() * (document.body.scrollHeight - ship.clientHeight);
+                return { x, y };
+            }
+
+            function moveShip() {
+                const { x, y } = getRandomPosition();
+                ship.style.left = `${x}px`;
+                ship.style.top = `${y}px`;
+                ship.style.transition = 'left 2s linear, top 2s linear';
+            }
+
+            function startMovingShip() {
+                ship.style.display = 'block';
+                moveShip();
+                setInterval(moveShip, 6000);
+            }
+
+            ship.addEventListener('click', () => {
+                window.location.href = 'jeu.html';
+            });
+
+            setTimeout(startMovingShip, 20000);
+        });
+
+        window.addEventListener('pageshow', () => {
+            const partnersLogos = document.getElementById('partnersLogos');
+            partnersLogos.style.animation = 'none';
+            void partnersLogos.offsetHeight; // Relance le reflow pour redémarrer l'animation
+            partnersLogos.style.animation = 'scroll 22s linear infinite';
+        });
+
+        function redirectAndRestartAnimation(url) {
+            const partnersLogos = document.getElementById('partnersLogos');
+            localStorage.setItem('partnersLogosAnimation', window.getComputedStyle(partnersLogos).animation);
+            window.location.href = url;
+        }
+    </script>
+</body>
+</html>

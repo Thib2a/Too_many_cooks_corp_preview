@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MANY</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('fonds/fond3.webp') no-repeat center center fixed;
+            background-size: cover;
+            padding: 20px;
+            margin: 0;
+            text-align: center; /* Centre tout le texte dans le body */
+        }
+        .quiz-container {
+            max-width: 800px;
+            margin: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            color: white;
+            text-align: left; /* Rétablir l'alignement du texte à gauche dans le conteneur */
+        }
+        .quiz-container h1, .quiz-container h2 {
+            text-align: center; /* Centrer les titres */
+        }
+        .question {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .question img {
+            width: 150px;
+            height: auto;
+            border-radius: 5px;
+            margin-right: 20px;
+        }
+        .question-content {
+            flex: 1;
+            min-width: 200px;
+        }
+        .choices {
+            margin-bottom: 10px;
+            text-align: left; /* Aligner le texte des choix à gauche */
+        }
+        .choices label {
+            display: block;
+            margin: 5px 0;
+        }
+        .button-container {
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .message {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
+        @media (max-width: 600px) {
+            .question {
+                flex-direction: column;
+                align-items: center;
+            }
+            .question img {
+                width: 100px;
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            .question-content {
+                text-align: center;
+            }
+            .choices {
+                text-align: center; /* Centrer les choix sur les petits écrans */
+            }
+            .choices label {
+                margin: 10px 0;
+            }
+            button {
+                width: 100%;
+                padding: 15px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <audio id="background-audio" src="sons/melenchon.mp3"></audio>
+
+    <div class="quiz-container">
+        <h1>Bien, maintenant testons vos connaissances des programmes des extrêmes</h1>
+        <h2>Front Populaire ou Front National ?</h2>
+        
+        <div class="question">
+            <img src="images/centrale.jpg" alt="Illustration pour la question 1">
+            <div class="question-content">
+                <p>Proposition 1 : Refuser l'écologie punitive et installer une centrale à charbon dans le bois de Boulogne</p>
+                <div class="choices">
+                    <label><input type="radio" name="q1" value="A"> Front Populaire</label>
+                    <label><input type="radio" name="q1" value="B"> Front National</label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="question">
+            <img src="images/sardine.jpg" alt="Illustration pour la question 2">
+            <div class="question-content">
+                <p>Proposition 2 : Nommer Sardine Ruisseau Première Ministre et interdire les barbecues</p>
+                <div class="choices">
+                    <label><input type="radio" name="q2" value="A"> Front Populaire</label>
+                    <label><input type="radio" name="q2" value="B"> Front National</label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="question">
+            <img src="images/migrant.jpg" alt="Illustration pour la question 3">
+            <div class="question-content">
+                <p>Proposition 3 : Supprimer les allocations familiales et le RSA. (Les personnes blanches ne sont pas concernées)</p>
+                <div class="choices">
+                    <label><input type="radio" name="q3" value="A"> Front Populaire</label>
+                    <label><input type="radio" name="q3" value="B"> Front National</label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="question">
+            <img src="images/sarouel.jpg" alt="Illustration pour la question 4">
+            <div class="question-content">
+                <p>Proposition 4 : Instaurer la cuisson au Woke comme la nouvelle norme dans les cantines scolaires et proposer des cours de Naturopathie aux élèves en difficulté</p>
+                <div class="choices">
+                    <label><input type="radio" name="q4" value="A"> Front Populaire</label>
+                    <label><input type="radio" name="q4" value="B"> Front National</label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="button-container">
+            <button onclick="checkAnswers()">Soumettre</button>
+        </div>
+        <div class="message" id="message"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.addEventListener('click', function() {
+                var audio = document.getElementById('background-audio');
+                audio.volume = 0.8;
+                audio.play();
+            });
+        });
+
+        function checkAnswers() {
+            const correctAnswers = ['B', 'A', 'B', 'A'];
+            let score = 0;
+            for (let i = 1; i <= 4; i++) {
+                const userAnswer = document.querySelector(`input[name="q${i}"]:checked`);
+                if (userAnswer && userAnswer.value === correctAnswers[i - 1]) {
+                    score++;
+                }
+            }
+            const messageElement = document.getElementById("message");
+            if (score === correctAnswers.length) {
+                messageElement.textContent = `Bien ! Deuxième test réussi !`;
+                messageElement.style.color = "lightgreen";
+                setTimeout(() => {
+                    location.href = 'enigme4.html';
+                }, 2000);
+            } else {
+                messageElement.textContent = `${score} sur 4 bonnes réponses. Ignare !`;
+            }
+        }
+    </script>
+</body>
+</html>

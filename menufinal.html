@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cooks GPT 1.0</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            margin: 0;
+        }
+        .container {
+            width: 35%;
+            text-align: center;
+            opacity: 1;
+            transition: opacity 3s;
+        }
+        video {
+            width: 100%;
+            height: auto;
+        }
+        .graphic-animation {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: lightgreen;
+            font-weight: bold;
+        }
+        .graphic-animation svg {
+            margin-bottom: 10px;
+        }
+        .final-message {
+            display: none;
+            color: lightgreen;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 3s;
+        }
+        .logo-container {
+            display: none;
+            opacity: 0;
+            transition: opacity 3s;
+            margin-bottom: 20px;
+        }
+        .logo-container img {
+            max-width: 300px;
+            height: auto;
+            animation: pulse 2s infinite, rotate 5.7s linear infinite; /* Vitesse de rotation réduite de 30% par rapport à 4s */
+        }
+        .button-container {
+            display: none;
+            justify-content: center;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 3s;
+            margin-top: 30px;
+        }
+        .button-container button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: blue;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .button-container button:hover {
+            background-color: darkblue;
+        }
+        #pdfViewer {
+            display: none;
+            width: 100%;
+            height: 80vh;
+            border: none;
+        }
+        @media (max-width: 600px) {
+            .container {
+                width: 80%;
+            }
+            .logo-container img {
+                max-width: 300px;
+            }
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="generationContainer">
+        <video id="generationVideo" autoplay muted>
+            <source src="videos/carrey.mp4" type="video/mp4">
+            Votre navigateur ne supporte pas la balise vidéo.
+        </video>
+        <div class="graphic-animation">
+            <svg viewBox="0 0 100 100" width="100" height="100">
+                <circle cx="50" cy="50" r="40" stroke="lightgreen" stroke-width="10" fill="none">
+                    <animate attributeName="stroke-dasharray" values="0,251.2;251.2,0" dur="2s" repeatCount="indefinite"/>
+                </circle>
+            </svg>
+            <p>Génération en cours...</p>
+        </div>
+    </div>
+    <div class="final-message" id="finalMessage">
+        <div class="logo-container" id="logoContainer">
+            <img src="logos/cooksgpt.png" alt="Logo">
+        </div>
+        Génération terminée du "Menu Bucolique 2.0"<br><br>
+        N'hésitez pas à visiter le reste du site...<br>
+        Vous y trouverez plein de surprises !
+        <div class="button-container" id="buttonContainer">
+            <button onclick="downloadPDF()">Télécharger en PDF</button>
+            <button onclick="visitSite()">Visiter le site</button>
+        </div>
+    </div>
+    <iframe id="pdfViewer" src="PDF/Menu_Too_Many_Cooks_2.0.pdf"></iframe>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.getElementById('generationVideo');
+            video.onended = showFinalMessage;
+        });
+
+        function showFinalMessage() {
+            const container = document.getElementById('generationContainer');
+            container.style.opacity = 0;
+            setTimeout(() => {
+                container.style.display = 'none';
+                const finalMessage = document.getElementById('finalMessage');
+                const logoContainer = document.getElementById('logoContainer');
+                const buttonContainer = document.getElementById('buttonContainer');
+                finalMessage.style.display = 'block';
+                logoContainer.style.display = 'block';
+                buttonContainer.style.display = 'flex';
+                setTimeout(() => {
+                    finalMessage.style.opacity = 1;
+                    logoContainer.style.opacity = 1;
+                    buttonContainer.style.opacity = 1;
+                }, 50);
+            }, 3000);
+        }
+
+        function downloadPDF() {
+            const link = document.createElement('a');
+            link.href = 'PDF/Menu_Too_Many_Cooks_2.0.pdf';
+            link.download = 'Menu_Too_Many_Cooks_2.0.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function visitSite() {
+            window.location.href = 'studios.html';
+        }
+    </script>
+</body>
+</html>

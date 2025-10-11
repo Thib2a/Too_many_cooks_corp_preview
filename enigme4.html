@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COOKS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('fonds/fond4.webp') no-repeat center center fixed;
+            background-size: cover;
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            color: white;
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+        }
+        .puzzle {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        input[type="text"] {
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            width: calc(100% - 22px); /* Ajuster pour le padding et la bordure */
+            color: black;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #fff;
+            color: black;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        #puzzle2, #puzzle3, #finalMessage, #thankYouMessage {
+            display: none;
+        }
+        .message {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
+        .final-message-text {
+            color: lightgreen;
+            font-weight: bold;
+        }
+        .additional-message-text {
+            color: white;
+        }
+        .thank-you-message-text {
+            color: lightgreen;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px; /* Augmenter l'espacement entre les logos */
+            margin-top: 20px;
+        }
+        .logo-container img {
+            cursor: pointer;
+            animation: pulse 4s infinite;
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        .graphic-animation {
+            display: none;
+            color: white;
+            text-align: center;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            .puzzle {
+                padding: 15px;
+            }
+            input[type="text"] {
+                padding: 8px;
+                margin: 8px 0;
+            }
+            button {
+                width: 100%;
+                padding: 12px 0;
+            }
+            .logo-container img {
+                width: 80px;
+            }
+            h1 {
+                font-size: 18px; /* Taille du texte réduite pour les titres */
+            }
+            .puzzle p, .message, .final-message-text, .additional-message-text, .thank-you-message-text {
+                font-size: 16px; /* Taille du texte réduite pour les paragraphes */
+            }
+            button {
+                font-size: 14px; /* Taille du texte réduite pour les boutons */
+            }
+        }
+    </style>
+</head>
+<body>
+    <audio id="background-audio" src="sons/La_Chanson_de_Mimi.mp3"></audio>
+
+    <div class="container" id="mainContainer">
+        <h1 id="title">Dernière ligne droite ! Voici une série de questions hardues :</h1>
+        <div id="puzzle1" class="puzzle">
+            <p>Il y a 3 Mélusines abandonnées dans un jardin d'enfants et tu en récupères 2.</p>
+            <p>Combien de Mélusines possèdes-tu maintenant ?</p>
+            <input type="text" id="answer1" onkeypress="handleKeyPress(event, checkAnswer1)">
+            <button onclick="checkAnswer1()">Soumettre</button>
+            <p id="feedback1" class="message"></p>
+        </div>
+        <div id="puzzle2" class="puzzle">
+            <p>Combien font 1 + 2 - 3 + 4 - 2 ?</p>
+            <input type="text" id="answer2" onkeypress="handleKeyPress(event, checkAnswer2)">
+            <button onclick="checkAnswer2()">Soumettre</button>
+            <p id="feedback2" class="message"></p>
+        </div>
+        <div id="puzzle3" class="puzzle">
+            <p>Quel était la réponse à la première question ?</p>
+            <input type="text" id="answer3" onkeypress="handleKeyPress(event, checkAnswer3)">
+            <button onclick="checkAnswer3()">Soumettre</button>
+            <p id="feedback3" class="message"></p>
+        </div>
+        <div id="finalMessage">
+            <h2 class="final-message-text">Bravo !<br>Vous avez réussi tous les tests !</h2>
+            <p>Pour obtenir le menu, lancez notre nouvelle IA Cooks GPT 1.0 en cliquant sur l'icône !</p>
+            <div class="logo-container">
+                <a href="menufinal.html"><img src="logos/cooksgpt.png" alt="CooksGPT" data-width="210" data-height="220"></a>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const audio = document.getElementById('background-audio');
+            document.body.addEventListener('click', function() {
+                audio.volume = 1; // Régler le volume
+                audio.play();
+            });
+
+            // Appliquer les tailles des logos
+            const logos = document.querySelectorAll('.logo-container img');
+            logos.forEach(logo => {
+                const width = logo.getAttribute('data-width');
+                const height = logo.getAttribute('data-height');
+                if (width) {
+                    logo.style.width = width + 'px';
+                }
+                if (height) {
+                    logo.style.height = height + 'px';
+                }
+            });
+        });
+
+        function handleKeyPress(event, callback) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                callback();
+            }
+        }
+
+        function checkAnswer1() {
+            const answer1 = document.getElementById('answer1').value.toLowerCase();
+            if (answer1 === '2' || answer1 === 'deux') {
+                document.getElementById('feedback1').textContent = 'Correct !';
+                document.getElementById('puzzle1').style.display = 'none';
+                document.getElementById('puzzle2').style.display = 'block';
+            } else {
+                document.getElementById('feedback1').textContent = 'Incorrect, essayez encore.';
+            }
+        }
+
+        function checkAnswer2() {
+            const answer2 = document.getElementById('answer2').value.toLowerCase();
+            if (answer2 === '2' || answer2 === 'deux') {
+                document.getElementById('feedback2').textContent = 'Correct !';
+                document.getElementById('puzzle2').style.display = 'none';
+                document.getElementById('puzzle3').style.display = 'block';
+            } else {
+                document.getElementById('feedback2').textContent = 'Incorrect, essayez encore.';
+            }
+        }
+
+        function checkAnswer3() {
+            const answer3 = document.getElementById('answer3').value.toLowerCase();
+            if (answer3 === '2' || answer3 === 'deux') {
+                document.getElementById('feedback3').textContent = 'Correct !';
+                document.getElementById('puzzle3').style.display = 'none';
+                document.getElementById('finalMessage').style.display = 'block';
+                document.getElementById('title').style.display = 'none';
+            } else {
+                document.getElementById('feedback3').textContent = 'Incorrect, essayez encore.';
+            }
+        }
+    </script>
+</body>
+</html>
