@@ -154,37 +154,59 @@
     /* ===============  CREATIONS  =============== */
     section.branches {
       position: relative;
-      padding: 60px 20px 74px;
+      padding: 72px 20px 96px;
       background:
         radial-gradient(ellipse 63% 50% at 50% 63%, 
           rgba(255,255,255,0.06), rgba(255,255,255,0) 55%),
         var(--bg-dark);
     }
-    .branch-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 58px;
-      justify-content: center;
-      align-items: center;
-    }
-    .branch {
-      width: 360px;
-      height: 360px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .branch img {
-      max-width: 90%;
-      max-height: 90%;
-      object-fit: contain;
-      transition: transform .25s ease, filter .25s ease, box-shadow .25s ease;
-      filter: drop-shadow(0 4px 14px rgba(0,0,0,.35)) brightness(.98);
-    }
+.branch-list{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-items:center;     /* centre sur la ligne médiane */
+  gap:58px;
+}
+/* Texte d'intro sous le titre : largeur + marge basse lisible */
+.branches p{
+  max-width: 72ch;
+  margin: 0 auto 32px;   /* avant 0 auto 0 -> on met 32px pour décoller du bloc logos */
+  font-size: 17px;
+  line-height: 1.6;
+  text-wrap: balance;
+  color: var(--muted);
+}
+
+/* Décoller les logos du texte + cohérence d'espacement */
+.branch-list{
+  margin-top: 100px;       /* petit coussin au-dessus */
+  gap: 64px;             /* un peu plus d’air entre les logos */
+}
+
+.branch{
+  width:clamp(260px, 28vw, 340px);
+  height:220px;           /* hauteur fixe = ligne visuelle alignée */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+}
+.branch img{
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+  display:block;
+  transition:transform .25s ease, filter .25s ease, box-shadow .25s ease;
+  filter:drop-shadow(0 4px 14px rgba(0,0,0,.35)) brightness(.98);
+}
     .branch img:hover {
       transform: translateY(-3px) scale(1.06);
       filter: drop-shadow(0 8px 26px rgba(56,189,248,.35)) brightness(1.04) contrast(1.02);
     }
+
+    @media (max-width: 860px){
+  .branch-list{ margin-top: 40px; gap: 36px; }
+}
 
     /* ===============  TIMELINE  =============== */
     section.timeline{padding:64px 18px 80px}
@@ -238,6 +260,17 @@
       .timeline-line{left:16px; transform:none;}
     }
 
+    /* Faire matcher le paragraphe d'intro de "Notre Histoire"
+   avec celui de "Nos créations" */
+section.timeline > p{
+  max-width: 72ch;      /* même largeur de ligne */
+  margin: 0 auto 32px;  /* même respiration */
+  font-size: 17px;      /* même taille de texte */
+  line-height: 1.6;
+  text-wrap: balance;
+  color: var(--muted);
+}
+
     /* ===============  DIRECTION  =============== */
     section.direction{padding:64px 18px 80px}
     .team-photos{
@@ -281,8 +314,8 @@
       padding: 80px 18px 96px;
     }
     section.about p{
-      max-width: 160ch;
-      margin: 10px auto;
+      max-width: 76ch; 
+      margin: 0 auto 12px;
       font-size: 18px;
       line-height: 1.6;
       letter-spacing: 0.01em;
@@ -428,15 +461,15 @@
     <!-- INTRO -->
     <section class="intro" id="intro" data-aos="fade-up" data-aos-offset="80">
       <h2 class="sr-only">Introduction</h2>
-      <p><strong>Bienvenue chez Too Many Cooks. Corporation</strong></p>
-      <p>Pionniers du non-sens depuis 2020</p>
-      <p>Découvrez nos œuvres maison, fruits d’un chaos parfaitement maîtrisé</p>
+      <p><strong>Bienvenue chez TMC Corp — faux conglomérat mondial, vraies expériences.</strong></p>
+      <p>Nous concevons des week-ends immersifs où réalité et fiction s’entremêlent dans un chaos parfaitement orchestré.</p>
     </section>
 
     <!-- CREATIONS -->
     <section class="branches" id="branches" aria-label="Nos créations">
       <h2 class="sr-only">Nos créations</h2>
       <img src="logos/creations.png" alt="Nos Créations" class="section-logo" loading="lazy" decoding="async" data-aos="fade-up"/>
+      <p data-aos="fade-up" data-aos-delay="60">Chaque année, la Corp. imagine un nouveau format : le programme du week-end se révèle sous forme de menu, de site web ou de toute autre idée saugrenue.</p>
       <div class="branch-list" data-aos="zoom-in" data-aos-delay="150">
         <div class="branch">
           <a class="focus-ring" href="studios.html" aria-label="Aller vers Too Many Cooks. Studios">
@@ -460,6 +493,8 @@
     <section class="timeline" aria-label="Notre Histoire">
       <h2 class="sr-only">Notre histoire</h2>
       <img src="logos/histoire.png" alt="Notre Histoire" class="section-logo" loading="lazy" decoding="async" data-aos="fade-up"/>
+      <p data-aos="fade-up" data-aos-delay="60">Depuis 2020, chaque édition adopte un format différent (menu, carte des soins, site…) pour révéler le programme réel au cœur d’une fiction orchestrée. Voici les grandes étapes, telles que validées par nos services internes.</p>
+
       <div class="timeline-container">
         <div class="timeline-line" aria-hidden="true"></div>
         <div class="timeline-item left" data-aos="fade-right" data-aos-duration="700">
@@ -472,19 +507,19 @@
         </div>
         <div class="timeline-item left" data-aos="fade-right" data-aos-duration="700">
           <h3><span class="t-ico">📈</span>2022/2023 – Expansion</h3>
-          <p>La Corpo reprend son développement. Les brainstormings deviennent incontrôlables, mais posent les bases d’une croissance assumée et démesurée.</p>
+          <p>La Corp. reprend son développement. Les brainstormings deviennent incontrôlables, donnant naissance au premier menu immersif et posant les bases d’une croissance démesurée.</p>
         </div>
         <div class="timeline-item right" data-aos="fade-left" data-aos-duration="700">
           <h3><span class="t-ico">🎬</span>2024 – Too Many Cooks. Studios</h3>
-          <p>Création du Too Many Cooks. Studios, une branche dédiée au cinéma… sans films. Production d’affiches, fausses campagnes et site officiel : le succès est total, du moins selon nos propres chiffres.</p>
+          <p>Création du Too Many Cooks. Studios, une branche dédiée au cinéma… sans films. Production d’affiches, fausses campagnes, menu 2.0 et site officiel : le succès est total, du moins selon nos propres chiffres.</p>
         </div>
         <div class="timeline-item left" data-aos="fade-right" data-aos-duration="700">
           <h3><span class="t-ico">🧘</span>2025 – Too Many Cooks. Institute</h3>
-          <p>Lancement du Too Many Cooks. Institute, un centre de bien-être unique, où chaque soin est conçu pour relaxer… ou déstabiliser. Nouvelle étape dans la diversification stratégique de la Corpo.</p>
+          <p>Lancement du Too Many Cooks. Institute, un centre de bien-être fictif avec sa carte des soins (menu 3.0), où chaque soin est conçu pour relaxer… ou déstabiliser. Nouvelle étape dans la diversification stratégique de la Corp.</p>
         </div>
         <div class="timeline-item right" data-aos="fade-left" data-aos-duration="700">
           <h3><span class="t-ico">🔮</span>2026 – Notre avenir</h3>
-          <p>Un projet international est en cours de préparation. Les détails restent confidentiels, classés au plus haut niveau de sécurité interne.</p>
+          <p>Un nouveau concept est en préparation à l’international. Les détails restent confidentiels, classés au plus haut niveau de sécurité interne.</p>
         </div>
         <div class="timeline-item left" data-aos="fade-right" data-aos-duration="700">
           <h3><span class="t-ico">🚀</span>2050 – Conquête de l’univers</h3>
@@ -497,6 +532,8 @@
     <section class="direction" aria-label="Direction">
       <h2 class="sr-only">Direction</h2>
       <img src="logos/direction.png" alt="Direction" class="section-logo" loading="lazy" decoding="async" data-aos="fade-up"/>
+      <p style="max-width:72ch;margin:10px auto 0;color:var(--muted);font-size:16px;line-height:1.5">
+      Né en famille, testé entre amis, désormais ouvert aux particuliers, aux pros et aux partenariats.</p>
       <div class="team-photos">
         <div class="team-member">
           <img src="images/mimi6.jpg" alt="Mimi" width="200" height="200" loading="lazy" decoding="async">
@@ -519,17 +556,17 @@
           <div class="caption">Uncle Tchibayoult<br/><em>Chief Information and Security Officer</em></div>
         </div>
       </div>
-      <a href="galerie.html" class="discover-button focus-ring" data-aos="zoom-in" data-aos-delay="200">Archives confidentielles</a>
+      <a href="galerie.html" class="discover-button focus-ring" data-aos="zoom-in" data-aos-delay="200">Déclasser les archives 🔓</a>    
     </section>
 
     <!-- A PROPOS -->
     <section class="about" aria-label="Infos et Contact">
       <h2 class="sr-only">Infos et contact</h2>
       <img src="logos/infos.png" alt="Infos et Contact" class="section-logo" loading="lazy" decoding="async" data-aos="fade-up"/>
-      <p data-aos="fade-up" data-aos-delay="100">Too Many Cooks. Corporation transforme l’ordinaire en expériences orchestrées où l’improbable devient une&nbsp;tradition.</p>
-      <p data-aos="fade-up" data-aos-delay="120">Aujourd’hui, elle conçoit des aventures toujours plus absurdes — entre fiction, immersion et chaos organisé.</p>
-      <p data-aos="fade-up" data-aos-delay="140">Le tout garanti inoubliable… mais jamais remboursable.</p>
-      <a href="a_propos.html" class="discover-button focus-ring" data-aos="zoom-in" data-aos-delay="200">Plus de détails et nous contacter</a>
+      <p data-aos="fade-up" data-aos-delay="100">Too Many Cooks. Corp. conçoit et orchestre des week-ends immersifs clés en main, mêlant écriture, mise en scène et création d’objets narratifs.</p>
+      <p data-aos="fade-up" data-aos-delay="120">Le tout garanti inoubliable… mais jamais remboursable.</p>
+      <p data-aos="fade-up" data-aos-delay="140">Envie d’en voir plus ou de préparer une édition ? Accédez aux détails complets ci-dessous et contactez-nous.</p>
+      <a href="a_propos.html" class="discover-button focus-ring" data-aos="zoom-in" data-aos-delay="200">Émettre une requête officielle 📎</a>
     </section>
   </main>
 
