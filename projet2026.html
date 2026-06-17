@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Projet 2026 — Bientôt</title>
+
+  <!-- Favicon -->
+  <link href="images/favicon_tmc_corp.ico" rel="icon" type="image/x-icon"/>
+  <link href="images/favicon_tmc_corp.ico" rel="shortcut icon" type="image/x-icon"/>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg-dark: #0f172a;
+      --bg-dark-2:#0b1220;
+      --text:#edf0f0;
+      --muted:#edf0f0;
+      --primary:#2563eb;
+      --primary-hover:#1e40af;
+      --line:#9aa9c7;
+      --glow:#38bdf8;
+      --card-radius:14px;
+      --shadow:0 10px 28px rgba(2,8,23,0.35);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;}
+    body{
+      margin:0;
+      font-family:'Sora',sans-serif;
+      background:var(--bg-dark);
+      color:var(--text);
+      text-align:center;
+      min-height:100svh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+    .wip-card{
+      max-width:560px;
+      width:100%;
+      background:var(--bg-dark-2);
+      border:1px solid rgba(56,189,248,0.18);
+      border-radius:var(--card-radius);
+      box-shadow:var(--shadow);
+      padding:clamp(28px,5vw,48px);
+    }
+    .wip-tag{
+      display:inline-block;
+      font-size:12px;font-weight:700;letter-spacing:.08em;
+      text-transform:uppercase;color:var(--glow);
+      border:1px solid rgba(56,189,248,0.3);
+      border-radius:999px;
+      padding:6px 14px;
+      margin-bottom:18px;
+    }
+    h1{
+      margin:0 0 14px;
+      font-size:clamp(24px,4.5vw,34px);
+      font-weight:600;
+    }
+    p.lead{
+      margin:0 0 30px;
+      color:var(--muted);
+      opacity:.85;
+      line-height:1.6;
+      font-size:15px;
+    }
+    .countdown{
+      display:flex;
+      justify-content:center;
+      gap:clamp(8px,2.5vw,18px);
+      margin-bottom:34px;
+      flex-wrap:wrap;
+    }
+    .countdown .unit{
+      min-width:64px;
+      background:rgba(56,189,248,0.06);
+      border:1px solid rgba(56,189,248,0.18);
+      border-radius:10px;
+      padding:12px 8px;
+    }
+    .countdown .num{
+      display:block;
+      font-size:clamp(20px,5vw,28px);
+      font-weight:700;
+      color:var(--glow);
+      line-height:1;
+    }
+    .countdown .label{
+      display:block;
+      margin-top:6px;
+      font-size:11px;
+      letter-spacing:.05em;
+      text-transform:uppercase;
+      color:var(--muted);
+      opacity:.7;
+    }
+    .home-button{
+      display:inline-block;
+      padding:12px 22px;border-radius:10px;
+      background:var(--primary);color:#fff;font-weight:600;
+      box-shadow:0 8px 22px rgba(37,99,235,0.25);
+      transition:transform .2s ease, background .2s ease, box-shadow .2s ease;
+      text-decoration:none;
+    }
+    .home-button:hover{
+      background:var(--primary-hover);
+      transform:translateY(-2px);
+      box-shadow:0 10px 28px rgba(30,64,175,0.35);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wip-card">
+    <span class="wip-tag">Page en cours de construction</span>
+    <h1>Projet 2026</h1>
+    <p class="lead">Nos services sont actuellement en train d'assembler ce dossier. Revenez plus tard.</p>
+
+    <div class="countdown" id="countdown" aria-live="polite">
+      <div class="unit"><span class="num" id="cd-days">--</span><span class="label">Jours</span></div>
+      <div class="unit"><span class="num" id="cd-hours">--</span><span class="label">Heures</span></div>
+      <div class="unit"><span class="num" id="cd-mins">--</span><span class="label">Min</span></div>
+      <div class="unit"><span class="num" id="cd-secs">--</span><span class="label">Sec</span></div>
+    </div>
+
+    <a class="home-button" href="index.html">Retour à l'accueil</a>
+  </div>
+
+  <script>
+    var target = Date.UTC(21111, 10, 11, 0, 0, 0); // 11/11/21111
+    function tick(){
+      var now = Date.now();
+      var diff = target - now;
+      if (diff < 0) diff = 0;
+      var s = Math.floor(diff / 1000);
+      var d = Math.floor(s / 86400); s -= d*86400;
+      var h = Math.floor(s / 3600); s -= h*3600;
+      var m = Math.floor(s / 60); s -= m*60;
+      document.getElementById('cd-days').textContent = d;
+      document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
+      document.getElementById('cd-mins').textContent = String(m).padStart(2,'0');
+      document.getElementById('cd-secs').textContent = String(s).padStart(2,'0');
+    }
+    tick();
+    setInterval(tick, 1000);
+  </script>
+</body>
+</html>

@@ -178,6 +178,21 @@
       font-size:12.5px;
       margin-top:14px;
       letter-spacing:.5px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+    }
+    .gate-spinner{
+      width:12px;height:12px;
+      border:2px solid rgba(56,189,248,0.25);
+      border-top-color:var(--glow);
+      border-radius:50%;
+      animation: gate-spin .7s linear infinite;
+      flex-shrink:0;
+    }
+    @keyframes gate-spin{
+      to{ transform: rotate(360deg); }
     }
     .gate-error:empty,
     .gate-status:empty{
@@ -815,7 +830,7 @@
       const val = gateInput.value.trim();
       if(val === GATE_CODE){
         gateError.textContent = '';
-        gateStatus.textContent = 'Recherche de votre réservation dans nos registres…';
+        gateStatus.innerHTML = '<span class="gate-spinner" aria-hidden="true"></span><span>Recherche de votre réservation dans nos registres…</span>';
         gateBtn.disabled = true;
         gateInput.disabled = true;
         setTimeout(() => {
