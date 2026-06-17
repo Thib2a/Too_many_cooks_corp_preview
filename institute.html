@@ -836,7 +836,6 @@
 <video autoplay="" id="introVideo" loop="" muted="" playsinline="">
 <source data-random="" src="videos/accueil-institute-1.mp4" type="video/mp4"/>
 <source data-random="" src="videos/accueil-institute-2.mp4" type="video/mp4"/>
-<source src="videos/fallback.ogg" type="video/ogg"/>
       Votre navigateur ne supporte pas la vidéo HTML5.
     </video>
 <img alt="Logo Too Many Cooks Institute" src="logos/logoInstitute.png"/>
@@ -1457,8 +1456,6 @@ if (selectedExpert === "titouan") {
         })
         .then(res => res.json())
         .then(data => {
-          console.log("🧠 Réponse GPT :", data.reply);
-          console.log("📦 Historique avant envoi :", history);
           const botMsg = document.createElement('div');
           botMsg.className = 'chat-msg bot';
           botMsg.innerText = data.reply;
