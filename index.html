@@ -447,15 +447,16 @@ section.timeline > p{
       background:#0f172a;
       transition: transform .35s ease, box-shadow .35s ease;
       will-change: transform;
+      transform-origin: 50% 100%;
     }
-    .stack-photo--back{ transform: rotate(-12deg) translate(-44px,20px); z-index:1; }
-    .stack-photo--front{ transform: rotate(7deg) translate(28px,-12px); z-index:2; }
+    .stack-photo--back{ transform: rotate(-13deg) translateX(-28px); z-index:1; }
+    .stack-photo--front{ transform: rotate(11deg) translateX(24px); z-index:2; }
     .about-image.stack-wrap:hover .stack-photo--back,
-    .stack-photo--back:focus-visible{ transform: rotate(-16deg) translate(-58px,26px); }
+    .stack-photo--back:focus-visible{ transform: rotate(-20deg) translateX(-42px); }
     .about-image.stack-wrap:hover .stack-photo--front,
-    .stack-photo--front:focus-visible{ transform: rotate(10deg) translate(40px,-18px); }
+    .stack-photo--front:focus-visible{ transform: rotate(17deg) translateX(36px); }
     .stack-photo:hover{
-      transform: rotate(0deg) translate(0,0) scale(1.05) !important;
+      transform: rotate(0deg) translateX(0) translateY(-14px) scale(1.06) !important;
       z-index:3;
       box-shadow:0 18px 40px rgba(2,8,23,.5);
     }
@@ -482,12 +483,12 @@ section.timeline > p{
       .about-image{ max-width:min(86vw, 380px); margin:0 auto; aspect-ratio: 4/5; }
       .about-image.stack-wrap{ padding:24px; }
       .stack-photo{ inset:24px; }
-      .stack-photo--back{ transform: rotate(-10deg) translate(-28px,14px); }
-      .stack-photo--front{ transform: rotate(6deg) translate(18px,-8px); }
+      .stack-photo--back{ transform: rotate(-12deg) translateX(-20px); }
+      .stack-photo--front{ transform: rotate(10deg) translateX(17px); }
       .about-image.stack-wrap:hover .stack-photo--back,
-      .stack-photo--back:focus-visible{ transform: rotate(-13deg) translate(-36px,18px); }
+      .stack-photo--back:focus-visible{ transform: rotate(-18deg) translateX(-30px); }
       .about-image.stack-wrap:hover .stack-photo--front,
-      .stack-photo--front:focus-visible{ transform: rotate(8deg) translate(24px,-11px); }
+      .stack-photo--front:focus-visible{ transform: rotate(15deg) translateX(26px); }
     }
 
     /* ===============  FOOTER  =============== */
