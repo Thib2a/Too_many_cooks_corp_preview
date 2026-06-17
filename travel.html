@@ -643,14 +643,6 @@
       max-height:80vh;
       border-radius:10px;
       box-shadow:0 20px 60px rgba(0,0,0,.6);
-      cursor:zoom-in;
-      transition:max-width .2s ease, max-height .2s ease;
-    }
-    .modal img.zoomed{
-      max-width:none;
-      max-height:none;
-      width:auto;
-      cursor:zoom-out;
     }
     .modal-actions{
       display:flex;
@@ -1222,33 +1214,9 @@
     });
     function closeModal(){
       modal.classList.remove('open');
-      modal.classList.remove('zoomed');
-      modalImg.classList.remove('zoomed');
-      modalImg.style.width = '';
     }
     modalClose.addEventListener('click', closeModal);
     modal.addEventListener('click', (e)=>{ if(e.target === modal) closeModal(); });
-
-    /* ================= Zoom sur l'affiche du modal ================= */
-    const modalImg = document.getElementById('modalImg');
-    modalImg.addEventListener('click', ()=>{
-      const zooming = !modalImg.classList.contains('zoomed');
-      if(zooming){
-        // zoom maîtrisé : ~1.8x la taille affichée, sans jamais dépasser la
-        // résolution native (évite un saut brutal vers une image immense).
-        const currentWidth = modalImg.getBoundingClientRect().width;
-        const targetWidth = Math.min(modalImg.naturalWidth, Math.round(currentWidth * 1.8));
-        modalImg.classList.add('zoomed');
-        modal.classList.add('zoomed');
-        modalImg.style.width = targetWidth + 'px';
-      } else {
-        modalImg.classList.remove('zoomed');
-        modal.classList.remove('zoomed');
-        modalImg.style.width = '';
-        modal.scrollTop = 0;
-        modal.scrollLeft = 0;
-      }
-    });
   </script>
 
 </body>
