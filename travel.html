@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Too Many Cooks. Travel</title>
+  <link href="images/favicon_travel.ico" rel="icon" type="image/x-icon"/>
+  <link href="images/favicon_travel.ico" rel="shortcut icon" type="image/x-icon"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Special+Elite&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bg-dark:#0f172a;
+      --bg-dark-2:#0b1220;
+      --text:#edf0f0;
+      --muted:#9aa9c7;
+      --kraft:#e7d6ab;
+      --kraft-2:#dcc890;
+      --cream:#f7ecd2;
+      --navy:#1b2a4a;
+      --navy-2:#0f1c33;
+      --gold:#b9842c;
+      --gold-light:#e0ad55;
+      --glow:#38bdf8;
+      --ink:#2c2114;
+      --shadow:0 14px 30px rgba(0,0,0,0.45);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;}
+    body{
+      font-family:'Special Elite', monospace;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(56,189,248,.08), transparent 40%),
+        radial-gradient(circle at 80% 90%, rgba(0,0,0,.35), transparent 45%),
+        linear-gradient(160deg, var(--bg-dark), var(--bg-dark-2));
+      color:var(--text);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding:28px 16px 32px;
+      text-align:center;
+    }
+
+    header{ margin-bottom:10px; }
+    header img.logo{
+      width:min(150px, 38vw);
+      filter:drop-shadow(0 8px 16px rgba(0,0,0,.5));
+      margin-bottom:6px;
+    }
+    h1{
+      font-family:'Playfair Display', serif;
+      font-weight:800;
+      font-size:clamp(24px, 5vw, 38px);
+      color:var(--text);
+      margin:6px 0 10px;
+      letter-spacing:.5px;
+    }
+    .subtitle{
+      font-size:13px;
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+      color:var(--glow);
+      margin:0 0 18px;
+      font-weight:600;
+    }
+
+    .intro{
+      max-width:560px;
+      font-size:14.5px;
+      line-height:1.7;
+      color:var(--muted);
+      margin:0 0 26px;
+    }
+    .intro strong{ color:var(--text); }
+
+    /* ===== Steps ===== */
+    #app{
+      width:100%;
+      max-width:640px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      margin-bottom:0;
+    }
+    .step{
+      display:none;
+      width:100%;
+      flex-direction:column;
+      align-items:center;
+    }
+    .step.active{
+      display:flex;
+      animation: fadeIn .5s ease;
+    }
+    @keyframes fadeIn{
+      from{ opacity:0; transform:translateY(8px); }
+      to{ opacity:1; transform:translateY(0); }
+    }
+    .step-label{
+      font-size:16px;
+      letter-spacing:2px;
+      text-transform:uppercase;
+      color:var(--gold-light);
+      font-weight:600;
+      margin-bottom:10px;
+    }
+    .step-text{
+      max-width:520px;
+      font-size:14px;
+      line-height:1.7;
+      color:var(--muted);
+      margin:0 0 22px;
+    }
+    .continue-btn{
+      font-family:'Playfair Display', serif;
+      font-weight:700;
+      font-size:14.5px;
+      letter-spacing:.5px;
+      color:var(--cream);
+      background:linear-gradient(160deg, var(--gold-light), var(--gold));
+      border:none;
+      border-radius:9px;
+      padding:11px 22px;
+      cursor:pointer;
+      box-shadow:0 8px 20px rgba(185,132,44,.4);
+      margin-top:18px;
+      transition:transform .2s ease;
+    }
+    .continue-btn:hover{ transform:translateY(-2px); }
+
+    /* ===== Step 0 : Gate ===== */
+    .gate-form{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      align-items:center;
+      margin-top:6px;
+    }
+    .gate-input{
+      font-family:'Playfair Display', serif;
+      font-size:20px;
+      letter-spacing:6px;
+      text-align:center;
+      width:170px;
+      padding:10px 8px;
+      border-radius:8px;
+      border:1.5px solid var(--gold-light);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+    }
+    .gate-input:focus{ outline:none; border-color:var(--glow); }
+    .gate-input.shake{ animation:shake .4s ease; }
+    @keyframes shake{
+      0%,100%{ transform:translateX(0); }
+      25%{ transform:translateX(-6px); }
+      75%{ transform:translateX(6px); }
+    }
+    .gate-btn{
+      font-family:'Special Elite', monospace;
+      font-size:13.5px;
+      color:var(--cream);
+      background:linear-gradient(160deg, var(--gold-light), var(--gold));
+      border:none;
+      border-radius:8px;
+      padding:11px 18px;
+      cursor:pointer;
+    }
+    .gate-error{
+      min-height:18px;
+      color:#e98a7a;
+      font-size:12.5px;
+      margin-top:14px;
+      letter-spacing:.5px;
+    }
+    .gate-status{
+      min-height:18px;
+      color:var(--glow);
+      font-size:12.5px;
+      margin-top:14px;
+      letter-spacing:.5px;
+    }
+    .gate-error:empty,
+    .gate-status:empty{
+      margin-top:0;
+      min-height:0;
+    }
+
+    /* ===== Titre Excursion retrouvée ===== */
+    .excursion-title{
+      font-family:'Playfair Display', serif;
+      font-weight:800;
+      font-size:clamp(22px, 4.2vw, 32px);
+      letter-spacing:1px;
+      color:var(--text);
+      margin:0 0 6px;
+    }
+    .excursion-sub{
+      font-family:'Playfair Display', serif;
+      font-size:15px;
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+      color:var(--text);
+      font-weight:800;
+      margin-bottom:32px;
+    }
+
+    /* ===== Step 1 : Identity ===== */
+    .passenger-grid{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:16px;
+      margin-bottom:6px;
+    }
+    .passenger-card{
+      width:144px;
+      flex:0 0 auto;
+      padding:8px 6px 10px;
+      border-radius:12px;
+      border:2px solid transparent;
+      cursor:pointer;
+      transition:.2s ease;
+      background:rgba(255,255,255,.03);
+    }
+    .passenger-card:hover{
+      background:rgba(255,255,255,.07);
+      transform:scale(1.08);
+      z-index:2;
+    }
+    .passenger-card.selected{
+      border-color:var(--glow);
+      background:rgba(56,189,248,.1);
+    }
+    .passenger-card img{
+      width:100%;
+      max-width:116px;
+      aspect-ratio:1/1;
+      border-radius:10px;
+      object-fit:cover;
+      border:2px solid var(--gold-light);
+      display:block;
+      margin:0 auto 8px;
+    }
+    .passenger-name{
+      font-family:'Playfair Display', serif;
+      font-weight:700;
+      font-size:12px;
+      color:var(--text);
+    }
+    .passenger-msg{
+      margin-top:16px;
+      min-height:20px;
+      font-size:13px;
+      color:var(--glow);
+      max-width:480px;
+    }
+    @media (max-width:480px){
+      .passenger-card{ flex:0 0 calc(33.333% - 11px); }
+    }
+    @media (max-width:360px){
+      .passenger-card{ flex:0 0 calc(50% - 8px); }
+    }
+
+    /* ===== Step 2 : Questionnaire ===== */
+    .q-passenger{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      margin-bottom:14px;
+    }
+    .q-passenger img{
+      width:72px; height:72px;
+      border-radius:10px;
+      object-fit:cover;
+      border:2px solid var(--gold-light);
+      display:block;
+      margin-bottom:6px;
+    }
+    .q-passenger span{
+      font-family:'Playfair Display', serif;
+      font-weight:700;
+      font-size:12.5px;
+      letter-spacing:.5px;
+      color:var(--text);
+    }
+    .question-text{
+      font-family:'Playfair Display', serif;
+      font-weight:700;
+      font-size:16px;
+      color:var(--text);
+      max-width:500px;
+      margin:0 0 16px;
+      line-height:1.4;
+    }
+    #questionArea{
+      width:100%;
+      max-width:500px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
+    .option-list{
+      display:flex;
+      flex-direction:column;
+      gap:9px;
+      width:100%;
+      max-width:420px;
+      align-self:center;
+    }
+    .option-btn{
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.2);
+      color:var(--text);
+      padding:10px 14px;
+      border-radius:8px;
+      cursor:pointer;
+      font-family:'Special Elite', monospace;
+      font-size:13px;
+      text-align:left;
+      transition:.2s ease;
+    }
+    .option-btn:hover{ background:rgba(255,255,255,.1); }
+    .option-btn.chosen{
+      border-color:var(--glow);
+      background:rgba(56,189,248,.14);
+    }
+    .ack-msg{
+      margin-top:14px;
+      min-height:16px;
+      font-size:12px;
+      font-style:italic;
+      color:var(--muted);
+    }
+    .q-progress{
+      font-size:11px;
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+
+    /* ===== Step 3 : Result ===== */
+    .result-stamp{
+      font-family:'Playfair Display', serif;
+      font-weight:800;
+      font-size:36px;
+      letter-spacing:2.5px;
+      color:#7fae6a;
+      border:4px solid #7fae6a;
+      border-radius:10px;
+      padding:12px 28px;
+      transform:rotate(-6deg);
+      margin:18px 0 34px;
+      animation: stampSlam .6s cubic-bezier(.36,1.4,.4,1) both;
+    }
+    @keyframes stampSlam{
+      0%{ opacity:0; transform:scale(2.4) rotate(-6deg); }
+      60%{ opacity:1; transform:scale(.92) rotate(-6deg); }
+      100%{ opacity:1; transform:scale(1) rotate(-6deg); }
+    }
+
+    /* ===== Step 4 : Tickets ===== */
+    .progress{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:8px;
+      font-size:13px;
+      color:var(--muted);
+      margin-bottom:22px;
+      letter-spacing:.5px;
+    }
+    .progress .stamp-row{ display:flex; }
+    .progress .stamp{
+      display:inline-block;
+      width:10px;height:10px;
+      border-radius:50%;
+      border:1.5px solid var(--glow);
+      margin:0 3px;
+      vertical-align:middle;
+    }
+    .progress .stamp.done{
+      background:var(--glow);
+      border-color:var(--glow);
+      box-shadow:0 0 8px rgba(56,189,248,.8);
+    }
+
+    .tickets{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:20px;
+      max-width:920px;
+      width:100%;
+      margin-bottom:28px;
+    }
+    .ticket{ width:clamp(150px, 44vw, 288px); }
+
+    .ticket{
+      position:relative;
+      background:var(--cream);
+      border-radius:10px;
+      box-shadow:var(--shadow);
+      padding:17px 15px 20px;
+      overflow:hidden;
+      border:1px solid rgba(0,0,0,.15);
+      transition:filter .3s ease, opacity .3s ease;
+    }
+    .ticket::before, .ticket::after{
+      content:"";
+      position:absolute;
+      width:16px; height:16px;
+      background:var(--kraft-2);
+      border-radius:50%;
+      top:50%;
+      transform:translateY(-50%);
+      box-shadow:0 0 0 1px rgba(0,0,0,.1) inset;
+    }
+    .ticket::before{ left:-8px; }
+    .ticket::after{ right:-8px; }
+
+    .ticket.locked{
+      filter:grayscale(1) brightness(.55);
+    }
+    .ticket.locked canvas,
+    .ticket.locked .auto-scratch{
+      pointer-events:none;
+    }
+    .ticket.locked .auto-scratch{ opacity:.3; }
+    .ticket-lock-tag{
+      display:none;
+      font-size:12.5px;
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+      color:var(--navy);
+      opacity:.55;
+      margin-top:8px;
+    }
+    .ticket.locked .ticket-lock-tag{ display:block; }
+    .ticket.locked .auto-scratch{ display:none; }
+
+    .ticket-time{
+      font-family:'Playfair Display', serif;
+      font-weight:700;
+      font-size:19px;
+      color:var(--gold);
+      margin-bottom:2px;
+      letter-spacing:1px;
+    }
+    .ticket-date{
+      font-family:'Playfair Display', serif;
+      font-weight:700;
+      font-size:13px;
+      color:var(--navy);
+      opacity:.65;
+      margin-bottom:8px;
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+    }
+
+    .scratch-wrap{
+      position:relative;
+      width:100%;
+      height:135px;
+      border-radius:6px;
+      overflow:hidden;
+    }
+    .ticket-reveal{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px;
+      font-family:'Playfair Display', serif;
+      font-weight:800;
+      font-size:20px;
+      color:var(--navy);
+      line-height:1.25;
+      background:#fffaf0;
+    }
+    canvas.scratch-canvas{
+      position:absolute;
+      inset:0;
+      cursor:crosshair;
+      touch-action:none;
+    }
+    .ticket-stamp{
+      position:absolute;
+      top:var(--stamp-top, 10px);
+      right:var(--stamp-right, 12px);
+      left:var(--stamp-left, auto);
+      font-family:'Playfair Display', serif;
+      font-weight:800;
+      font-size:16px;
+      letter-spacing:2px;
+      color:#b5402f;
+      border:2px solid #b5402f;
+      border-radius:4px;
+      padding:3px 8px;
+      transform:rotate(var(--stamp-rot, -12deg)) scale(1.6);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .3s ease .2s, transform .35s cubic-bezier(.34,1.6,.64,1) .2s;
+      z-index:5;
+    }
+    .ticket-stamp.show{
+      opacity:.85;
+      transform:rotate(var(--stamp-rot, -12deg)) scale(1);
+    }
+    .scratch-hint{
+      position:absolute;
+      bottom:6px; left:0; right:0;
+      text-align:center;
+      font-size:10px;
+      letter-spacing:1px;
+      color:rgba(247,236,210,.85);
+      pointer-events:none;
+      text-transform:uppercase;
+    }
+    .auto-scratch{
+      margin-top:8px;
+      font-size:13px;
+      background:none;
+      border:1px dashed var(--navy);
+      color:var(--navy);
+      padding:5px 10px;
+      border-radius:6px;
+      cursor:pointer;
+      font-family:'Special Elite', monospace;
+      opacity:.75;
+    }
+    .auto-scratch:hover{ opacity:1; }
+
+    .final-block{
+      width:100%;
+      max-width:480px;
+      margin:0 auto 18px;
+      display:none;
+      flex-direction:column;
+      align-items:center;
+      text-align:center;
+      animation:fadeIn .6s ease;
+    }
+    .final-block.show{ display:flex; }
+    .final-stamp{
+      font-family:'Playfair Display', serif;
+      font-weight:800;
+      font-size:26px;
+      letter-spacing:2px;
+      color:#b5402f;
+      border:3px solid #b5402f;
+      border-radius:8px;
+      padding:8px 20px;
+      transform:rotate(7deg);
+      margin:0 auto 12px;
+      display:inline-block;
+    }
+    .final-text{
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.6;
+      margin:0;
+    }
+
+    .unlock-zone{
+      margin-top:6px;
+      min-height:62px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .unlock-btn{
+      font-family:'Playfair Display', serif;
+      font-weight:800;
+      font-size:17px;
+      letter-spacing:.5px;
+      color:var(--cream);
+      background:linear-gradient(160deg, var(--gold-light), var(--gold));
+      border:none;
+      border-radius:10px;
+      padding:14px 26px;
+      cursor:pointer;
+      box-shadow:0 10px 24px rgba(185,132,44,.45);
+      opacity:.35;
+      pointer-events:none;
+      transition:opacity .35s ease, transform .2s ease;
+    }
+    .unlock-btn.ready{
+      opacity:1;
+      pointer-events:auto;
+      animation:pulse 1.8s ease-in-out infinite;
+    }
+    .unlock-btn.ready:hover{ transform:translateY(-2px); }
+    @keyframes pulse{
+      0%,100%{ box-shadow:0 10px 24px rgba(185,132,44,.45); }
+      50%{ box-shadow:0 10px 34px rgba(185,132,44,.8); }
+    }
+    .unlock-caption{
+      font-size:11.5px;
+      color:var(--muted);
+      margin-top:8px;
+    }
+
+    footer{
+      margin-top:10px;
+      max-width:520px;
+      font-size:11px;
+      color:var(--muted);
+      opacity:.7;
+      line-height:1.6;
+    }
+
+    /* Modal billet final */
+    .modal{
+      position:fixed; inset:0;
+      background:rgba(15,20,30,.92);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:50;
+      padding:24px;
+      overflow:auto;
+    }
+    .modal.open{ display:flex; }
+    .modal.zoomed{
+      align-items:flex-start;
+      justify-content:flex-start;
+    }
+    .modal-inner{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      max-width:min(92vw, 480px);
+      margin:auto;
+    }
+    .modal.zoomed .modal-inner{
+      margin:0;
+      max-width:none;
+    }
+    .modal img{
+      max-width:100%;
+      max-height:80vh;
+      border-radius:10px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);
+      cursor:zoom-in;
+      transition:max-width .2s ease, max-height .2s ease;
+    }
+    .modal img.zoomed{
+      max-width:none;
+      max-height:none;
+      width:auto;
+      cursor:zoom-out;
+    }
+    .modal-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      justify-content:center;
+      margin-top:16px;
+    }
+    .modal-btn{
+      font-family:'Playfair Display', serif;
+      font-weight:700;
+      font-size:13.5px;
+      letter-spacing:.4px;
+      color:var(--cream);
+      background:linear-gradient(160deg, var(--gold-light), var(--gold));
+      border:none;
+      border-radius:9px;
+      padding:11px 18px;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-block;
+      transition:.2s ease;
+    }
+    .modal-btn:hover{ transform:translateY(-2px); }
+    .modal-btn-secondary{
+      background:none;
+      border:1px solid rgba(255,255,255,.4);
+      color:#fff;
+    }
+    .modal-close{
+      position:absolute;
+      top:18px; right:18px;
+      width:40px; height:40px;
+      border-radius:50%;
+      background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.3);
+      color:#fff;
+      font-size:20px;
+      cursor:pointer;
+      line-height:1;
+      z-index:51;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img class="logo" src="logos/logoTravel.png" alt="Too Many Cooks. Travel">
+    <br>
+    <br>
+    <div class="subtitle">Formulaire d’enregistrement des voyageurs</div>
+  </header>
+
+  <p class="intro" id="introWelcome">
+    <strong>Too Many Cooks. Travel vous souhaite la bienvenue.</strong><br><br>
+    Une journée de détente et de divertissements a été soigneusement composée par nos équipes, afin de vous offrir une expérience dont le souvenir devrait résister au temps.<br><br>
+    Avant la remise de votre itinéraire, quelques formalités restent à accomplir.<br><br>Elles ne devraient prendre que quelques minutes, sauf incapacité manifeste à suivre trois instructions et reconnaître son propre visage.
+  </p>
+
+  <div id="introExcursion" style="display:none;">
+    <div class="excursion-title">Excursion retrouvée</div>
+    <div class="excursion-sub">— Paris, samedi 1er août 2026 —</div>
+  </div>
+
+  <div id="app">
+
+    <!-- STEP 0 : ACCÈS DOSSIER -->
+    <div class="step active" id="step-gate">
+      <div class="step-label">Bureau des réservations</div>
+      <p class="step-text">Reportez ci-dessous la référence de réservation figurant sur votre faire-part. Elle permettra à nos services de retrouver l’excursion soigneusement sélectionnée en votre nom.</p>
+      <form class="gate-form" id="gateForm">
+        <input type="text" id="gateInput" class="gate-input" maxlength="6" inputmode="numeric" placeholder="••••••" autocomplete="off">
+        <button type="submit" class="gate-btn" id="gateBtn">Retrouver ma réservation</button>
+      </form>
+      <div class="gate-error" id="gateError"></div>
+      <div class="gate-status" id="gateStatus"></div>
+    </div>
+
+    <!-- STEP 1 : IDENTIFICATION DU PASSAGER -->
+    <div class="step" id="step-identity">
+      <div class="step-label">Contrôle des voyageurs</div>
+      <p class="step-text">Votre réservation a bien été retrouvée.<br>Veuillez sélectionner votre identité.<br><br>Toute erreur d’identification sera considérée comme une tentative de fraude à la Sécurité sociale et transmise au ministère compétent, dès que celui-ci aura été identifié.</p>
+      <div class="passenger-grid" id="passengerGrid"></div>
+      <div class="passenger-msg" id="passengerMsg"></div>
+      <button class="continue-btn" id="identityContinue" style="display:none;">Confirmer cette identité</button>
+    </div>
+
+    <!-- STEP 2 : DÉCLARATION PRÉALABLE -->
+    <div class="step" id="step-questions">
+      <div class="step-label">Formalités avant départ</div>
+      <div class="q-passenger" id="qPassenger"></div>
+      <div class="q-progress" id="qProgress"></div>
+      <div id="questionArea"></div>
+    </div>
+
+    <!-- STEP 3 : DOSSIER RECEVABLE -->
+    <div class="step" id="step-result">
+      <div class="result-stamp">VOYAGEUR ADMIS</div>
+      <p class="step-text">Vos formalités ont été examinées avec toute l'attention dont nos services sont capables.</p>
+      <p class="step-text">Malgré plusieurs réponses préoccupantes, un niveau de confiance envers l'agence particulièrement faible et quelques aptitudes au voyage encore incertaines, votre inscription à l'excursion est confirmée.</p>
+      <p class="step-text">Votre itinéraire et le programme de la journée peuvent désormais vous être remis. À partir d'ici, l'agence décline toute responsabilité concernant vos attentes.</p>
+      <button class="continue-btn" id="resultContinue">Découvrir mes cinq coupons d'escale</button>
+    </div>
+
+    <!-- STEP 4 : TICKETS À GRATTER -->
+    <div class="step" id="step-tickets">
+      <div class="step-label">Vos coupons d'escale</div>
+      <p class="step-text">Votre admission ayant été validée malgré plusieurs réserves internes, l'agence est désormais autorisée à vous remettre votre itinéraire.</p>
+      <p class="step-text">Cinq coupons composent le programme de votre excursion. Grattez-les dans l'ordre indiqué : vous ne gagnerez pas d'argent, mais vous perdrez progressivement le contrôle de votre journée.</p>
+      <div class="progress" id="progress">
+        <span id="progressText">0 escale révélée sur 5</span>
+        <span class="stamp-row">
+          <span class="stamp" data-i="0"></span><span class="stamp" data-i="1"></span><span class="stamp" data-i="2"></span><span class="stamp" data-i="3"></span><span class="stamp" data-i="4"></span>
+        </span>
+      </div>
+
+      <div class="tickets" id="tickets">
+        <!-- Les 5 tickets sont générés en JS -->
+      </div>
+
+      <div class="final-block" id="finalBlock">
+        <div class="final-stamp">ITINÉRAIRE APPROUVÉ</div>
+      </div>
+
+      <div class="unlock-zone">
+        <button class="unlock-btn" id="unlockBtn">Consulter le programme complet</button>
+      </div>
+      <div class="unlock-caption" id="unlockCaption">Carnet incomplet — toutes les escales doivent être révélées avant remise du programme.</div>
+    </div>
+
+  </div>
+
+  <footer>
+    — Too Many Cooks. Travel —<br>
+    Nous organisons le voyage, vous en gardez les souvenirs<br>
+    Toute réclamation d’ordre psychologique devra être adressée à votre thérapeute.
+  </footer>
+
+  <div class="modal" id="modal">
+    <button class="modal-close" id="modalClose">&times;</button>
+    <div class="modal-inner">
+      <img id="modalImg" src="fonds/affiche_wk2.jpg" alt="Programme complet du Weekend Buc. & Incr. 2.0">
+      <div class="modal-actions">
+        <a class="modal-btn" id="modalDownload" href="fonds/affiche_wk2.jpg" download="Programme_WK2.jpg">Télécharger l'image</a>
+        <a class="modal-btn modal-btn-secondary" href="index.html">Retour à l'accueil</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ================= Navigation entre étapes ================= */
+    function showStep(id){
+      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+
+    /* ================= STEP 0 : Accès dossier ================= */
+    const GATE_CODE = '010826';
+    const gateForm = document.getElementById('gateForm');
+    const gateInput = document.getElementById('gateInput');
+    const gateBtn = document.getElementById('gateBtn');
+    const gateError = document.getElementById('gateError');
+    const gateStatus = document.getElementById('gateStatus');
+    const introWelcome = document.getElementById('introWelcome');
+    const introExcursion = document.getElementById('introExcursion');
+
+    gateForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const val = gateInput.value.trim();
+      if(val === GATE_CODE){
+        gateError.textContent = '';
+        gateStatus.textContent = 'Recherche de votre réservation dans nos registres…';
+        gateBtn.disabled = true;
+        gateInput.disabled = true;
+        setTimeout(() => {
+          introWelcome.style.display = 'none';
+          introExcursion.style.display = 'block';
+          showStep('step-identity');
+        }, 5000);
+      } else {
+        gateError.textContent = "Numéro non reconnu. Vérifiez votre faire-part avant qu'une destination de remplacement ne vous soit attribuée.";
+        gateInput.classList.remove('shake');
+        requestAnimationFrame(() => gateInput.classList.add('shake'));
+        setTimeout(() => gateInput.classList.remove('shake'), 400);
+      }
+    });
+
+    /* ================= STEP 1 : Identification du passager ================= */
+    const passengers = [
+      { id:'cdc',     name:'Côte de Choux', img:'images/portrait_cotedechoux.jpg', msg:"Identité reconnue. Une collation préventive a été prévue toutes les deux heures afin d’éviter toute réclamation prématurée concernant les horaires du dîner." },
+      { id:'caillou', name:'Caillou',       img:'images/portrait_caillou.jpg',      msg:"Identité reconnue. En cas d’incident, l’agence se réserve le droit de la désigner responsable médicale sans préavis." },
+      { id:'mara',    name:'Mara',          img:'images/portrait_mara.jpg',         msg:"Identité reconnue. L’appellation « Chatong » figure bien dans nos registres, malgré l’absence de justificatif vétérinaire." },
+      { id:'thiba',   name:'Thiba',         img:'images/portrait_thiba.jpg',        msg:"Identité reconnue. Il s’agirait du principal responsable de cette opération. Merci de ne pas l’encourager : il prend déjà beaucoup trop cela au sérieux." },
+      { id:'cycy',    name:'Cycy',          img:'images/portrait_cycy.jpg',         msg:"Identité reconnue. Le marcel Leo Beer, même accompagné de sa double paire de lunettes de soleil, est interdit durant l’excursion pour des raisons esthétiques et de sécurité collective." },
+    ];
+
+    const passengerGrid = document.getElementById('passengerGrid');
+    const passengerMsg = document.getElementById('passengerMsg');
+    const identityContinue = document.getElementById('identityContinue');
+    let selectedPassenger = null;
+
+    passengers.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'passenger-card';
+      card.innerHTML = `
+        <img src="${p.img}" alt="${p.name}">
+        <div class="passenger-name">${p.name}</div>
+      `;
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.passenger-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        selectedPassenger = p;
+        passengerMsg.textContent = p.msg;
+        identityContinue.style.display = 'inline-block';
+      });
+      passengerGrid.appendChild(card);
+    });
+
+    identityContinue.addEventListener('click', () => {
+      introExcursion.style.display = 'none';
+      showStep('step-questions');
+      renderQuestion();
+    });
+
+    /* ================= STEP 2 : Déclaration préalable ================= */
+    const questions = [
+      {
+        text: "Face à un changement de programme, quelle sera votre première réaction ?",
+        options: [
+          "Suivre les instructions de l’agence sans poser de question",
+          "Chercher immédiatement quelque chose à manger",
+          "Commander un verre en attendant des explications",
+          "Tenir l’organisateur personnellement responsable",
+        ],
+      },
+      {
+        text: "Quel niveau de confiance accordez-vous à l’agence ?",
+        options: [
+          "Total et probablement excessif",
+          "Modéré, mais renforcé par l’apéritif",
+          "Aucun, mais il est désormais trop tard",
+          "Je pensais répondre à un sondage de la SNCF",
+        ],
+      },
+      {
+        text: "En cas de problème durant l’excursion, sur qui comptez-vous réellement ?",
+        options: [
+          "Le personnel de l’agence",
+          "La professionnelle de santé présente",
+          "Les autorités compétentes, si elles existent",
+          "Personne, afin de limiter le nombre de témoins",
+        ],
+      },
+    ];
+
+    const ackMessages = {
+      cdc: [
+        "Réponse enregistrée. L’agence vous autorise à embarquer avec un Banh Mi de secours, sous réserve de ne pas le déclarer comme bagage cabine.",
+        "Réponse enregistrée. Une collation préventive toutes les deux heures est programmée afin d’éviter toute négociation anticipée concernant l’heure des repas.",
+        "Réponse enregistrée. Toute tentative de consultation anticipée du menu sera traitée comme un acte de survie et non comme une violation du règlement.",
+      ],
+      caillou: [
+        "Réponse enregistrée. Votre désignation comme responsable médicale reste effective, y compris après le deuxième verre.",
+        "Réponse enregistrée. La présence de Teuteu n’a pas été déclarée, mais une place demeure disponible en soute sur présentation de son carnet de vaccination.",
+        "Réponse enregistrée. En cas d’incident, l’agence vous fournira une trousse de secours vide et l’entière confiance du groupe.",
+      ],
+      mara: [
+        "Réponse enregistrée. La température extérieure ne pourra malheureusement pas être adaptée aux exigences frigorifiques de Chatong.",
+        "Réponse enregistrée. En cas de chaleur digne d’un four à Banh Mi, aucun Nguyen de service ne sera présent pour vous fournir une serviette rafraîchissante.",
+        "Réponse enregistrée. L’appellation “Chatong” n’ouvre droit ni au transport en panier ni aux croquettes de courtoisie.",
+      ],
+      thiba: [
+        "Réponse enregistrée. L’organisateur vient une nouvelle fois de valider sa propre procédure.",
+        "Réponse enregistrée. Merci de ne pas lui donner de nouvelle idée avant la fin de l’excursion.",
+        "Réponse enregistrée. Le sujet demeure sous surveillance depuis qu’il considère la création de ce formulaire comme une activité raisonnable.",
+      ],
+      cycy: [
+        "Réponse enregistrée. Le port simultané de deux paires de lunettes demeure incompatible avec nos procédures d’orientation.",
+        "Réponse enregistrée. L’agence maintient son interdiction concernant le marcel Leo Beer, même en cas de forte luminosité ou de chaleur excessive.",
+        "Réponse enregistrée. Toute tentative de coordonner le marcel et les lunettes sera considérée comme une atteinte volontaire au patrimoine visuel parisien.",
+      ],
+    };
+
+    const questionArea = document.getElementById('questionArea');
+    const qProgress = document.getElementById('qProgress');
+    const qPassenger = document.getElementById('qPassenger');
+    let qIndex = 0;
+
+    function renderQuestion(){
+      if(qIndex >= questions.length){
+        showStep('step-result');
+        return;
+      }
+
+      if(selectedPassenger){
+        qPassenger.innerHTML = `
+          <img src="${selectedPassenger.img}" alt="${selectedPassenger.name}">
+          <span>${selectedPassenger.name}</span>
+        `;
+      }
+
+      const q = questions[qIndex];
+      qProgress.textContent = `Formalité ${qIndex + 1} / ${questions.length}`;
+      questionArea.innerHTML = `
+        <div class="question-text">${q.text}</div>
+        <div class="option-list" id="optionList"></div>
+        <div class="ack-msg" id="ackMsg"></div>
+      `;
+      const optionList = document.getElementById('optionList');
+      const ackMsg = document.getElementById('ackMsg');
+
+      const nextBtn = document.createElement('button');
+      nextBtn.className = 'continue-btn';
+      nextBtn.style.display = 'none';
+      nextBtn.textContent = qIndex < questions.length - 1 ? 'Formalité suivante' : 'Signer les conditions de voyage';
+      nextBtn.addEventListener('click', () => {
+        qIndex++;
+        renderQuestion();
+      });
+
+      q.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt;
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#optionList .option-btn').forEach(b => {
+            b.classList.remove('chosen');
+          });
+          btn.classList.add('chosen');
+          const msgs = selectedPassenger ? ackMessages[selectedPassenger.id] : null;
+          ackMsg.textContent = msgs ? msgs[qIndex] : "Réponse enregistrée.";
+          nextBtn.style.display = 'inline-block';
+        });
+        optionList.appendChild(btn);
+      });
+
+      questionArea.appendChild(nextBtn);
+    }
+
+    /* ================= STEP 4 : Tickets à gratter ================= */
+    const stops = [
+      { time: "12h00", name: "L'Apéritif du Grand Large", msg: "Embarquement autorisé. Stabilité des verres non vérifiée." },
+      { time: "15h00", name: "L'Expédition Incognita", msg: "Territoire ajouté à la carte malgré l'opposition des cartographes." },
+      { time: "16h50", name: "Le Sommet des Bons Vivants", msg: "Altitude conforme. Genoux non contrôlés." },
+      { time: "19h15", name: "Le Dîner des Mirages", msg: "Table localisée. Le cadastre maintient son désaccord." },
+      { time: "21h40", name: "L'Escapade Intergalactique", msg: "Juridiction terrestre suspendue jusqu'à nouvel ordre." },
+    ];
+
+    const ticketsEl = document.getElementById('tickets');
+    const unlockBtn = document.getElementById('unlockBtn');
+    const unlockCaption = document.getElementById('unlockCaption');
+    const finalBlock = document.getElementById('finalBlock');
+    const modal = document.getElementById('modal');
+    const modalClose = document.getElementById('modalClose');
+
+    let revealedCount = 0;
+    const ticketEls = [];
+    const ticketInits = [];
+
+    stops.forEach((stop, i) => {
+      const ticket = document.createElement('div');
+      ticket.className = 'ticket' + (i === 0 ? '' : ' locked');
+      ticket.innerHTML = `
+        <div class="ticket-time">— ${stop.time} —</div>
+        <div class="ticket-date">Samedi 1er août 2026</div>
+        <div class="scratch-wrap">
+          <div class="ticket-reveal">${stop.name}</div>
+          <canvas class="scratch-canvas"></canvas>
+          <div class="ticket-stamp">CONFIRMÉ</div>
+        </div>
+        <button class="auto-scratch">Pas d'ongles ? Recourir au grattage assisté</button>
+        <div class="ticket-lock-tag">🔒 Prochaine escale non délivrée</div>
+      `;
+      ticketsEl.appendChild(ticket);
+      ticketEls.push(ticket);
+
+      const canvas = ticket.querySelector('canvas');
+      const wrap = ticket.querySelector('.scratch-wrap');
+      const ctx = canvas.getContext('2d');
+      const autoBtn = ticket.querySelector('.auto-scratch');
+      const stampEl = ticket.querySelector('.ticket-stamp');
+      let revealed = false;
+      let canvasReady = false;
+
+      // chaque tampon apparaît à un endroit/angle légèrement différent
+      const stampRot = Math.round(-20 + Math.random()*34);
+      const stampTop = Math.round(6 + Math.random()*16);
+      const stampSide = Math.round(8 + Math.random()*16);
+      stampEl.style.setProperty('--stamp-rot', stampRot + 'deg');
+      stampEl.style.setProperty('--stamp-top', stampTop + 'px');
+      if(Math.random() < 0.5){
+        stampEl.style.setProperty('--stamp-left', stampSide + 'px');
+        stampEl.style.setProperty('--stamp-right', 'auto');
+      } else {
+        stampEl.style.setProperty('--stamp-right', stampSide + 'px');
+        stampEl.style.setProperty('--stamp-left', 'auto');
+      }
+
+      function drawFoil(){
+        const w = canvas.width, h = canvas.height;
+        const grad = ctx.createLinearGradient(0,0,w,h);
+        grad.addColorStop(0, '#2a3c63');
+        grad.addColorStop(.5, '#1b2a4a');
+        grad.addColorStop(1, '#2a3c63');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0,0,w,h);
+        ctx.strokeStyle = 'rgba(185,132,44,.5)';
+        ctx.lineWidth = 1;
+        for(let x=-h; x<w; x+=10){
+          ctx.beginPath();
+          ctx.moveTo(x,0);
+          ctx.lineTo(x+h,h);
+          ctx.stroke();
+        }
+        ctx.fillStyle = 'rgba(247,236,210,.9)';
+        ctx.font = '10px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('GRATTEZ POUR RÉVÉLER', w/2, h-10);
+        ctx.fillText("COUPON SCELLÉ", w/2, h/2);
+      }
+
+      // match canvas pixel buffer 1:1 to its displayed box so text stays
+      // perfectly centered regardless of card width (fixes off-center foil text).
+      // Deferred until the tickets step is actually visible, otherwise the
+      // wrap measures 0x0 (display:none) and nothing gets drawn.
+      ticketInits.push(() => {
+        // ne pas réinitialiser un coupon déjà révélé ou en cours de grattage :
+        // on perdrait sinon la progression du joueur lors d'un simple redimensionnement.
+        if(revealed) return;
+        if(canvasReady && getErasedRatio() > 0) return;
+        const rect = wrap.getBoundingClientRect();
+        canvas.width = Math.round(rect.width) || 206;
+        canvas.height = Math.round(rect.height) || 108;
+        drawFoil();
+        canvasReady = true;
+      });
+
+      function getErasedRatio(){
+        const data = ctx.getImageData(0,0,canvas.width,canvas.height).data;
+        let cleared = 0, total = 0;
+        for(let p=3; p<data.length; p+=4*7){
+          total++;
+          if(data[p] < 80) cleared++;
+        }
+        return total ? cleared/total : 0;
+      }
+
+      function checkReveal(){
+        if(revealed) return;
+        if(ticket.classList.contains('locked')) return;
+        if(getErasedRatio() > 0.45){
+          revealed = true;
+          canvas.style.transition = 'opacity .5s ease';
+          canvas.style.opacity = '0';
+          setTimeout(()=> canvas.style.display='none', 500);
+          autoBtn.style.display = 'none';
+          stampEl.classList.add('show');
+          revealedCount++;
+          updateProgress();
+          unlockNext(i);
+        }
+      }
+
+      function scratchAt(x,y){
+        if(ticket.classList.contains('locked')) return;
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(x,y,16,0,Math.PI*2);
+        ctx.fill();
+        checkReveal();
+      }
+
+      function getPos(e){
+        const rect = canvas.getBoundingClientRect();
+        const cx = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+        const cy = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+        return { x: cx * (canvas.width/rect.width), y: cy * (canvas.height/rect.height) };
+      }
+
+      let drawing = false;
+      const start = (e)=>{ if(ticket.classList.contains('locked')) return; drawing = true; const p = getPos(e); scratchAt(p.x,p.y); };
+      const move = (e)=>{ if(!drawing) return; const p = getPos(e); scratchAt(p.x,p.y); e.preventDefault(); };
+      const end = ()=>{ drawing = false; };
+
+      canvas.addEventListener('mousedown', start);
+      canvas.addEventListener('mousemove', move);
+      window.addEventListener('mouseup', end);
+      canvas.addEventListener('touchstart', start, {passive:false});
+      canvas.addEventListener('touchmove', move, {passive:false});
+      canvas.addEventListener('touchend', end);
+
+      autoBtn.addEventListener('click', ()=>{
+        if(ticket.classList.contains('locked')) return;
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+        checkReveal();
+      });
+    });
+
+    let ticketsInitialized = false;
+    document.getElementById('resultContinue').addEventListener('click', () => {
+      showStep('step-tickets');
+      if(!ticketsInitialized){
+        ticketsInitialized = true;
+        ticketInits.forEach(fn => fn());
+      }
+    });
+
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+      if(!ticketsInitialized) return;
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        ticketInits.forEach(fn => fn());
+      }, 200);
+    });
+
+    function unlockNext(i){
+      if(ticketEls[i + 1]){
+        ticketEls[i + 1].classList.remove('locked');
+      }
+    }
+
+    const progressText = document.getElementById('progressText');
+
+    function updateProgress(){
+      document.querySelectorAll('.stamp').forEach((s,i)=>{
+        if(i < revealedCount) s.classList.add('done');
+      });
+      progressText.textContent = `${revealedCount} escale${revealedCount > 1 ? 's' : ''} révélée${revealedCount > 1 ? 's' : ''} sur 5`;
+      if(revealedCount >= 5){
+        unlockBtn.classList.add('ready');
+        unlockCaption.textContent = "Carnet complet — votre itinéraire est prêt à être consulté.";
+        finalBlock.classList.add('show');
+        launchConfetti();
+      }
+    }
+
+    function launchConfetti(){
+      const colors = ['#38bdf8', '#e0ad55', '#edf0f0', '#2563eb'];
+      for(let i=0; i<60; i++){
+        const c = document.createElement('div');
+        c.style.position = 'fixed';
+        c.style.top = '-10px';
+        c.style.left = Math.random()*100 + 'vw';
+        c.style.width = (4+Math.random()*5) + 'px';
+        c.style.height = (4+Math.random()*5) + 'px';
+        c.style.background = colors[i % colors.length];
+        c.style.opacity = .9;
+        c.style.borderRadius = Math.random()<.5 ? '50%' : '2px';
+        c.style.zIndex = 60;
+        c.style.pointerEvents = 'none';
+        const fall = 2.4 + Math.random()*1.6;
+        const drift = (Math.random()-0.5)*120;
+        c.style.transition = `transform ${fall}s ease-in, opacity ${fall}s ease-in`;
+        document.body.appendChild(c);
+        requestAnimationFrame(()=>{
+          c.style.transform = `translate(${drift}px, ${window.innerHeight+40}px) rotate(${Math.random()*360}deg)`;
+          c.style.opacity = 0;
+        });
+        setTimeout(()=> c.remove(), fall*1000 + 200);
+      }
+    }
+
+    unlockBtn.addEventListener('click', ()=>{
+      if(!unlockBtn.classList.contains('ready')) return;
+      modal.classList.add('open');
+    });
+    function closeModal(){
+      modal.classList.remove('open');
+      modal.classList.remove('zoomed');
+      modalImg.classList.remove('zoomed');
+      modalImg.style.width = '';
+    }
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e)=>{ if(e.target === modal) closeModal(); });
+
+    /* ================= Zoom sur l'affiche du modal ================= */
+    const modalImg = document.getElementById('modalImg');
+    modalImg.addEventListener('click', ()=>{
+      const zooming = !modalImg.classList.contains('zoomed');
+      if(zooming){
+        // zoom maîtrisé : ~1.8x la taille affichée, sans jamais dépasser la
+        // résolution native (évite un saut brutal vers une image immense).
+        const currentWidth = modalImg.getBoundingClientRect().width;
+        const targetWidth = Math.min(modalImg.naturalWidth, Math.round(currentWidth * 1.8));
+        modalImg.classList.add('zoomed');
+        modal.classList.add('zoomed');
+        modalImg.style.width = targetWidth + 'px';
+      } else {
+        modalImg.classList.remove('zoomed');
+        modal.classList.remove('zoomed');
+        modalImg.style.width = '';
+        modal.scrollTop = 0;
+        modal.scrollLeft = 0;
+      }
+    });
+  </script>
+
+</body>
+</html>

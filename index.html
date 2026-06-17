@@ -154,7 +154,7 @@
     /* ===============  CREATIONS  =============== */
     section.branches {
       position: relative;
-      padding: 72px 20px 96px;
+      padding: 72px 20px 48px;
       background:
         radial-gradient(ellipse 63% 50% at 50% 63%, 
           rgba(255,255,255,0.06), rgba(255,255,255,0) 55%),
@@ -208,8 +208,82 @@
   .branch-list{ margin-top: 40px; gap: 36px; }
 }
 
+/* ===============  OPÉRATIONS SPÉCIALES  =============== */
+.special-list{
+  margin-top: 76px;
+}
+.special-list .branch{
+  flex-direction:column;
+}
+.special-list .branch img{
+  max-width:79%;
+  max-height:79%;
+}
+.branch-caption{
+  display:block;
+  margin-top:10px;
+  font-size:14px;
+  color:var(--muted);
+  opacity:.85;
+}
+@media (max-width: 860px){
+  .special-list{ margin-top: 42px; }
+  .special-list .branch img{
+    max-width:92%;
+    max-height:92%;
+  }
+}
+
+/* ===============  LIGHTBOX OPÉRATIONS SPÉCIALES  =============== */
+.ops-modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  background:rgba(2,8,23,0.88);
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+.ops-modal.open{ display:flex; }
+.ops-modal-content{
+  max-width:92vw;
+  max-height:90vh;
+  background:var(--bg-dark-2);
+  border-radius:var(--card-radius);
+  padding:18px;
+  text-align:center;
+  box-shadow:var(--shadow);
+  border:1px solid rgba(148,163,184,0.18);
+}
+.ops-modal-content img{
+  max-width:100%;
+  max-height:75vh;
+  border-radius:10px;
+  display:block;
+  margin:0 auto;
+}
+.ops-modal-caption{
+  margin:14px auto 0;
+  color:var(--text);
+  font-size:15px;
+  max-width:46ch;
+  line-height:1.5;
+  text-wrap:balance;
+}
+.ops-modal-close{
+  position:absolute;
+  top:18px;
+  right:26px;
+  color:#fff;
+  font-size:32px;
+  font-weight:bold;
+  cursor:pointer;
+}
+.ops-modal-close:hover{ color:var(--glow); }
+
     /* ===============  TIMELINE  =============== */
-    section.timeline{padding:64px 18px 80px}
+    section.timeline{padding:36px 18px 80px}
     .timeline-container{position:relative;max-width:980px;margin:0 auto}
     .timeline-line{
       position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);
@@ -229,35 +303,42 @@
     }
     .timeline-item p{
       margin:0;color:var(--muted);
-      text-align: justify;
-      text-align-last: left;
-      hyphens: auto;
-      -webkit-hyphens: auto;
-      -ms-hyphens: auto;
+      text-align: left;
+      hyphens: none;
+      -webkit-hyphens: none;
+      -ms-hyphens: none;
       overflow-wrap: break-word;
       word-break: normal;
       text-wrap: pretty;
     }
-    .timeline-item.left{left:0}
-    .timeline-item.right{left:50%}
+    .timeline-item.left{left:0;width:calc(50% - 10px)}
+    .timeline-item.right{left:calc(50% + 10px);width:calc(50% - 10px)}
     .timeline-item.left::before,
     .timeline-item.right::before{
-      content:"";position:absolute;top:28px;width:14px;height:14px;border-radius:50%;
+      content:"";position:absolute;top:50%;transform:translateY(-50%);width:14px;height:14px;border-radius:50%;
       background:radial-gradient(circle at 35% 35%, #fff, var(--glow) 55%);
       box-shadow:0 0 0 6px rgba(56,189,248,0.18), 0 0 18px rgba(56,189,248,0.55);
     }
-    .timeline-item.left::before{right:-7px}
-    .timeline-item.right::before{left:-7px}
+    .timeline-item.left::before{right:-17px}
+    .timeline-item.right::before{left:-17px}
     .t-ico{font-size:1.2em;display:block;margin-bottom:6px;text-align:center}
 
     @media (max-width: 860px){
+      .timeline-container{ --tl-gutter: 32px; padding-inline: 10px; }
+      .timeline-line{ left: var(--tl-gutter); transform:none; }
       .timeline-item,
       .timeline-item.left,
       .timeline-item.right{
-        width:92%;left:50%!important;transform:translateX(-50%);
+        left: 0 !important;
+        transform: none !important;
+        margin-left: calc(var(--tl-gutter) + 8px);
+        width: calc(100% - (var(--tl-gutter) + 8px));
+        padding: 18px;
       }
-      .timeline-item::before{left:-7px !important; right:auto !important;}
-      .timeline-line{left:16px; transform:none;}
+      .timeline-item::before{
+        left: calc(-1 * (var(--tl-gutter) - 8px)) !important;
+        right: auto !important;
+      }
     }
 
     /* Faire matcher le paragraphe d'intro de "Notre Histoire"
@@ -312,17 +393,98 @@ section.timeline > p{
     /* ===============  A PROPOS  =============== */
     section.about{
       padding: 80px 18px 96px;
+      position: relative;
     }
-    section.about p{
-      max-width: 76ch; 
-      margin: 0 auto 12px;
-      font-size: 17px;
-      line-height: 1.6;
+    .about-grid{
+      display:grid;
+      grid-template-columns: 1fr 304px;
+      gap:40px;
+      align-items:start;
+      max-width:900px;
+      margin:0 auto 36px;
+      text-align:left;
+    }
+    .about-text p{
+      max-width: 52ch;
+      margin: 0 0 18px;
+      font-size: 16px;
+      line-height: 1.7;
       letter-spacing: 0.01em;
-      text-align: center;
+      text-align: left;
       color: var(--muted);
+      opacity: .8;
       text-wrap: balance;
       hyphens: none;
+    }
+    .about-text p:last-child{ margin-bottom:0; }
+    .about-text .about-lead{
+      font-size:19px;
+      font-weight:700;
+      color:var(--text);
+      opacity:1;
+      max-width:52ch;
+      margin-bottom:20px;
+    }
+    .about-image{
+      position:relative;
+      aspect-ratio: 4/5;
+    }
+    .about-image img{
+      display:block;width:100%;height:100%;object-fit:cover;
+    }
+    .about-image.stack-wrap{ padding:34px; margin-top:-26px; }
+    .stack-photo{
+      position:absolute;
+      inset:34px;
+      display:block;
+      border-radius: var(--card-radius);
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      border:1px solid rgba(148,163,184,0.18);
+      background:#0f172a;
+      transition: transform .35s ease, box-shadow .35s ease;
+      will-change: transform;
+    }
+    .stack-photo--back{ transform: rotate(-12deg) translate(-44px,20px); z-index:1; }
+    .stack-photo--front{ transform: rotate(7deg) translate(28px,-12px); z-index:2; }
+    .about-image.stack-wrap:hover .stack-photo--back,
+    .stack-photo--back:focus-visible{ transform: rotate(-16deg) translate(-58px,26px); }
+    .about-image.stack-wrap:hover .stack-photo--front,
+    .stack-photo--front:focus-visible{ transform: rotate(10deg) translate(40px,-18px); }
+    .stack-photo:hover{
+      transform: rotate(0deg) translate(0,0) scale(1.05) !important;
+      z-index:3;
+      box-shadow:0 18px 40px rgba(2,8,23,.5);
+    }
+    .about-clause{
+      max-width:480px;
+      margin:0 auto 28px;
+      padding:16px 22px;
+      border-radius:var(--card-radius);
+      background:rgba(56,189,248,0.06);
+      border:1px solid rgba(56,189,248,0.18);
+      text-align:center;
+    }
+    .about-clause .clause-label{
+      display:block;font-size:12px;font-weight:700;letter-spacing:.08em;
+      text-transform:uppercase;color:var(--glow);margin-bottom:8px;
+    }
+    .about-clause p{
+      margin:0;font-size:14px;font-style:italic;color:var(--muted);
+      opacity:.9;line-height:1.6;
+    }
+    @media (max-width: 760px){
+      .about-grid{ grid-template-columns:1fr; gap:24px; text-align:center; }
+      .about-text p, .about-text .about-lead{ text-align:center; max-width:56ch; margin-left:auto; margin-right:auto; }
+      .about-image{ max-width:320px; margin:0 auto; aspect-ratio: 4/5; }
+      .about-image.stack-wrap{ padding:24px; }
+      .stack-photo{ inset:24px; }
+      .stack-photo--back{ transform: rotate(-10deg) translate(-28px,14px); }
+      .stack-photo--front{ transform: rotate(6deg) translate(18px,-8px); }
+      .about-image.stack-wrap:hover .stack-photo--back,
+      .stack-photo--back:focus-visible{ transform: rotate(-13deg) translate(-36px,18px); }
+      .about-image.stack-wrap:hover .stack-photo--front,
+      .stack-photo--front:focus-visible{ transform: rotate(8deg) translate(24px,-11px); }
     }
 
     /* ===============  FOOTER  =============== */
@@ -380,27 +542,7 @@ section.timeline > p{
       }
       .branch img{ max-width: 92%; max-height: 92%; margin: 0 auto; }
 
-      /* 2) Timeline – alignée à gauche, pas de coupe */
-      .timeline-container{ 
-        --tl-gutter: 32px;      /* espace réservé à la ligne + pastille */
-        padding-inline: 10px;
-      }
-      .timeline-line{ left: var(--tl-gutter); }
-      .timeline-item,
-      .timeline-item.left,
-      .timeline-item.right{
-        left: 0 !important;
-        transform: none !important;
-        margin-left: calc(var(--tl-gutter) + 8px);
-        width: calc(100% - (var(--tl-gutter) + 8px));
-        padding: 18px;
-      }
-      .timeline-item::before{
-        left: calc(-1 * (var(--tl-gutter) - 8px)) !important;
-        right: auto !important;
-      }
-
-      /* 3) Footer – logos plus grands sur mobile */
+      /* 2) Footer – logos plus grands sur mobile */
       .footer-logos{ gap: 16px; }
       .footer-logo-box{
         width: min(88vw, 360px);
@@ -462,14 +604,14 @@ section.timeline > p{
     <section class="intro" id="intro" data-aos="fade-up" data-aos-offset="80">
       <h2 class="sr-only">Introduction</h2>
       <p><strong>Bienvenue chez TMC Corp. — là où l’improbable prend forme.</strong></p>
-      <p>Nous concevons des week-ends immersifs où réalité et fiction s’entremêlent dans un chaos parfaitement orchestré.</p>
+      <p>Nous imaginons et orchestrons des week-ends immersifs où activités réelles, fiction absurde et révélations scénarisées s’entremêlent dans un chaos parfaitement organisé.</p>
     </section>
 
     <!-- CREATIONS -->
     <section class="branches" id="branches" aria-label="Nos créations">
       <h2 class="sr-only">Nos créations</h2>
       <img src="logos/creations.png" alt="Nos Créations" class="section-logo" loading="lazy" decoding="async" data-aos="fade-up"/>
-      <p data-aos="fade-up" data-aos-delay="60">Chaque année, la Corp. imagine un nouveau format pour révéler le programme du week-end : menus gastronomiques, affiches de films, sites web, supports physiques… ou toute autre idée saugrenue.</p>
+      <p data-aos="fade-up" data-aos-delay="60">Chaque année, la Corp. développe un nouvel univers mêlant narration, supports physiques et expériences numériques pour mettre en scène et révéler le programme d’un week-end réel.<br><br>Sélectionnez l’un des projets ci-dessous pour découvrir les univers, supports et opérations déjà conçus par nos services.</p>
       <div class="branch-list" data-aos="zoom-in" data-aos-delay="150">
         <div class="branch">
           <a class="focus-ring" href="studios.html" aria-label="Aller vers Too Many Cooks. Studios">
@@ -487,39 +629,51 @@ section.timeline > p{
           </a>
         </div>
       </div>
+
+      <div class="branch-list special-list" data-aos="zoom-in" data-aos-delay="150">
+        <div class="branch">
+          <a class="focus-ring ops-trigger" href="fonds/affiche_wk1.jpg" data-caption="Weekend Buc. &amp; Incr. 1.0 — Une journée immersive parisienne mêlant activités surprises, narration décalée et programme illustré." aria-label="Voir l'affiche de l'Opération Spéciale 1.0">
+            <img src="logos/logoWK1.png" alt="Opération Spéciale 1.0" loading="lazy" decoding="async">
+          </a>
+        </div>
+        <div class="branch">
+          <a class="focus-ring" href="travel.html" aria-label="Aller vers Too Many Cooks. Travel">
+            <img src="logos/logoTravel.png" alt="Too Many Cooks. Travel" loading="lazy" decoding="async">
+          </a>
+        </div>
+      </div>
     </section>
 
     <!-- TIMELINE -->
     <section class="timeline" aria-label="Notre Histoire">
       <h2 class="sr-only">Notre histoire</h2>
       <img src="logos/histoire.png" alt="Notre Histoire" class="section-logo" loading="lazy" decoding="async" data-aos="fade-up"/>
-      <p data-aos="fade-up" data-aos-delay="60">Depuis 2020, chaque week-end est unique : le programme est révélé au cœur d’une fiction soignée. Voici nos grandes étapes, telles que validées par nos services internes.</p>
-
+      <p data-aos="fade-up" data-aos-delay="60">Depuis 2020, une simple idée entre proches est devenue un univers mêlant week-ends réels, sites web, affiches, objets, énigmes et filiales parfaitement fictives. Voici les principales étapes de cette évolution, telles que reconstituées et partiellement approuvées par nos services internes.</p>
       <div class="timeline-container">
         <div class="timeline-line" aria-hidden="true"></div>
         <div class="timeline-item left" data-aos="fade-right" data-aos-duration="700">
-          <h3><span class="t-ico">🌱</span>2020 – Fondation</h3>
-          <p>Naissance de TMC Corp. Un simple week-end qui dérape devient la genèse d’une organisation appelée à transformer l’ordinaire en chaos organisé.</p>
+          <h3><span class="t-ico">🌱</span>2020 – Origine</h3>
+          <p>Un premier week-end réunissant activités, escape game et expérience immersive suffit à créer une tradition. Le nom Too Many Cooks apparaît ; aucune stratégie de développement mondiale n’est encore déclarée.</p>
         </div>
         <div class="timeline-item right" data-aos="fade-left" data-aos-duration="700">
           <h3><span class="t-ico">😷</span>2021 – Pause forcée</h3>
-          <p>Une année marquée par le Covid. Les opérations se poursuivent à distance, avec des innovations discutables comme l’apéro stratégique en visioconférence.</p>
+          <p>Une année marquée par le Covid interrompt les opérations physiques. La future multinationale survit grâce aux apéritifs en visioconférence et à une stratégie de développement encore largement imaginaire.</p>
         </div>
         <div class="timeline-item left" data-aos="fade-right" data-aos-duration="700">
           <h3><span class="t-ico">📈</span>2022/2023 – Expansion</h3>
-          <p>La Corp. reprend son développement. Les brainstormings deviennent incontrôlables, donnant naissance au premier menu immersif et posant les bases d’une croissance démesurée.</p>
+          <p>Les opérations reprennent et le projet se structure. En 2023, le programme devient un menu gastronomique burlesque : le Weekend Bucolique et ses révélations scénarisées prennent forme, posant les bases d’une croissance démesurée.</p>
         </div>
         <div class="timeline-item right" data-aos="fade-left" data-aos-duration="700">
           <h3><span class="t-ico">🎬</span>2024 – Too Many Cooks. Studios</h3>
-          <p>Création du Too Many Cooks. Studios, une branche dédiée au cinéma… sans films. Production d’affiches, fausses campagnes, menu 2.0 et site officiel : le succès est total, du moins selon nos propres chiffres.</p>
+          <p>Too Many Cooks. Studios Too Many Cooks. Studios transforme l’organisation du week-end en une fausse production cinématographique : site web, affiches, campagnes fictives et menu 2.0 à débloquer — le tout sans produire le moindre film. Too Many Cooks. Corporation est également officiellement créée, sans autorisation préalable.</p>
         </div>
         <div class="timeline-item left" data-aos="fade-right" data-aos-duration="700">
           <h3><span class="t-ico">🧘</span>2025 – Too Many Cooks. Institute</h3>
-          <p>Lancement du Too Many Cooks. Institute, un centre de bien-être fictif avec sa carte des soins (menu 3.0), où chaque soin est conçu pour relaxer… ou déstabiliser. Nouvelle étape dans la diversification stratégique de la Corp.</p>
+          <p>Too Many Cooks. Institute présente son nouveau week-end comme un séjour bien-être fictif où chaque soin est conçu pour relaxer… ou déstabiliser. Un site de spa, une carte de soins, des colis, une mallette à énigmes, une VHS et des interactions automatisées prolongent l’expérience plusieurs semaines avant le avant le jour J.</p>
         </div>
         <div class="timeline-item right" data-aos="fade-left" data-aos-duration="700">
-          <h3><span class="t-ico">🔮</span>2026 – Notre avenir</h3>
-          <p>Un nouveau concept est en préparation à l’international. Les détails restent confidentiels, classés au plus haut niveau de sécurité interne.</p>
+          <h3><span class="t-ico">✈️</span>2026 – Too Many Cooks. Travel</h3>
+          <p>Alors qu’un nouveau projet international reste classé confidentiel, Too Many Cooks. Travel inaugure de nouveaux formats courts et développe les Opérations Spéciales avec d’autres groupes. La diversification est officiellement lancée sous la formule "Weekend Buc. & Incr.", malgré l’absence d’étude de marché.</p>
         </div>
         <div class="timeline-item left" data-aos="fade-right" data-aos-duration="700">
           <h3><span class="t-ico">🚀</span>2050 – Conquête de l’univers</h3>
@@ -533,7 +687,7 @@ section.timeline > p{
       <h2 class="sr-only">Direction</h2>
       <img src="logos/direction.png" alt="Direction" class="section-logo" loading="lazy" decoding="async" data-aos="fade-up"/>
       <p style="max-width:72ch;margin:10px auto 0;color:var(--muted);font-size:16px;line-height:1.5">
-      Né en famille, validé entre amis, désormais ouvert aux particuliers, aux professionnels et aux partenariats.</p>
+      Les figures historiques de Too Many Cooks forment le noyau de la Corporation et composent une direction aussi officielle que discutable.<br><br>Leurs fonctions ont été attribuées selon des procédures internes que personne n’a souhaité auditer.</p>
       <div class="team-photos">
         <div class="team-member">
           <img src="images/mimi6.jpg" alt="Mimi" width="200" height="200" loading="lazy" decoding="async">
@@ -563,9 +717,26 @@ section.timeline > p{
     <section class="about" aria-label="Infos et Contact">
       <h2 class="sr-only">Infos et contact</h2>
       <img src="logos/infos.png" alt="Infos et Contact" class="section-logo" loading="lazy" decoding="async" data-aos="fade-up"/>
-      <p data-aos="fade-up" data-aos-delay="100">TMC Corp. conçoit et planifie de A à Z des week-ends immersifs clés en main : repérages, réservations, coordination du planning, écriture, mise en scène et création d’objets narratifs.</p>
-      <p data-aos="fade-up" data-aos-delay="120">Le tout garanti inoubliable… voire traumatisant (le suivi post-traumatique reste à votre charge).</p>
-      <p data-aos="fade-up" data-aos-delay="140">Envie d’en voir plus ou de préparer une édition ? Accédez aux détails complets ci-dessous et contactez-nous.</p>
+      <div class="about-grid">
+        <div class="about-text">
+          <p class="about-lead" data-aos="fade-up" data-aos-delay="100">Derrière la Corporation se trouve un projet créatif imaginé et orchestré par Thibault, avec la complicité de ses proches.</p>
+          <p data-aos="fade-up" data-aos-delay="120">Chaque édition réunit conception du programme, coordination logistique, écriture, direction artistique, création web, teasing, supports imprimés, objets narratifs et mise en scène.</p>
+          <p data-aos="fade-up" data-aos-delay="140">L’objectif : transformer la préparation, la révélation et les souvenirs d’un simple week-end en une expérience cohérente.</p>
+          <p data-aos="fade-up" data-aos-delay="160">Le projet est ouvert aux particuliers, aux collaborations professionnelles et aux partenariats, sous réserve d’acceptation du dossier par nos services compétents.</p>
+        </div>
+        <div class="about-image stack-wrap" data-aos="fade-up" data-aos-delay="140">
+          <a class="focus-ring ops-trigger stack-photo stack-photo--back" href="fonds/a_propos.webp" data-caption="Notre histoire" aria-label="Voir l'image en grand">
+            <img src="fonds/a_propos.webp" alt="Notre histoire — Too Many Cooks Corp." loading="lazy" decoding="async">
+          </a>
+          <a class="focus-ring ops-trigger stack-photo stack-photo--front" href="fonds/projet_tmc_corp.jpg" data-caption="Créations physiques développées pour les différentes éditions de Too Many Cooks. Corporation : accessoires narratifs, supports imprimés, objets interactifs et dispositifs de révélation." aria-label="Voir l'image en grand">
+            <img src="fonds/projet_tmc_corp.jpg" alt="Mallette d'opération Too Many Cooks Corp." loading="lazy" decoding="async">
+          </a>
+        </div>
+      </div>
+      <div class="about-clause" data-aos="fade-up" data-aos-delay="180">
+        <span class="clause-label">Clause de satisfaction</span>
+        <p>Expérience garantie inoubliable, voire traumatisante.<br>Le suivi post-traumatique reste à votre charge.</p>
+      </div>
       <a href="a_propos.html" class="discover-button focus-ring" data-aos="zoom-in" data-aos-delay="200">Émettre une requête officielle 📎</a>
     </section>
   </main>
@@ -582,11 +753,38 @@ section.timeline > p{
     </div>
   </footer>
 
+  <!-- LIGHTBOX OPÉRATIONS SPÉCIALES -->
+  <div class="ops-modal" id="opsModal">
+    <span class="ops-modal-close" id="opsModalClose">&times;</span>
+    <div class="ops-modal-content">
+      <img id="opsModalImg" src="" alt="Affiche Opération Spéciale">
+      <div class="ops-modal-caption" id="opsModalCaption"></div>
+    </div>
+  </div>
+
   <!-- AOS -->
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
   <script>
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     AOS.init(reduce ? { disable: true } : { once:true, offset:60, duration:650, easing:'ease-out-cubic' });
+  </script>
+  <script>
+    document.querySelectorAll('.ops-trigger').forEach(el => {
+      el.addEventListener('click', function(e){
+        e.preventDefault();
+        const src = this.getAttribute('href');
+        const cap = this.getAttribute('data-caption') || '';
+        document.getElementById('opsModalImg').src = src;
+        document.getElementById('opsModalCaption').textContent = cap;
+        document.getElementById('opsModal').classList.add('open');
+      });
+    });
+    document.getElementById('opsModalClose').addEventListener('click', () => {
+      document.getElementById('opsModal').classList.remove('open');
+    });
+    document.getElementById('opsModal').addEventListener('click', function(e){
+      if (e.target === this) this.classList.remove('open');
+    });
   </script>
 </body>
 </html>
