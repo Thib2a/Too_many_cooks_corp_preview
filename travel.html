@@ -290,6 +290,27 @@
       border:2px solid var(--gold-light);
       display:block;
       margin-bottom:6px;
+      cursor:zoom-in;
+      transition:transform .2s ease;
+    }
+    .q-passenger img:hover{ transform:scale(1.04); }
+    .portrait-zoom-overlay{
+      position:fixed; inset:0;
+      background:rgba(2,8,23,.85);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:999;
+      cursor:zoom-out;
+      padding:24px;
+    }
+    .portrait-zoom-overlay.open{ display:flex; }
+    .portrait-zoom-overlay img{
+      max-width:min(90vw,360px);
+      max-height:80vh;
+      border-radius:14px;
+      border:2px solid var(--gold-light);
+      box-shadow:0 20px 50px rgba(0,0,0,.6);
     }
     .q-passenger span{
       font-family:'Playfair Display', serif;
@@ -796,6 +817,10 @@
     Toute réclamation d’ordre psychologique devra être adressée à votre thérapeute.
   </footer>
 
+  <div class="portrait-zoom-overlay" id="portraitZoomOverlay">
+    <img id="portraitZoomImg" src="" alt="">
+  </div>
+
   <div class="modal" id="modal">
     <button class="modal-close" id="modalClose">&times;</button>
     <div class="modal-inner">
@@ -946,6 +971,20 @@
     const qProgress = document.getElementById('qProgress');
     const qPassenger = document.getElementById('qPassenger');
     let qIndex = 0;
+
+    /* ===== Zoom portrait (étape Formalités avant départ) ===== */
+    const portraitZoomOverlay = document.getElementById('portraitZoomOverlay');
+    const portraitZoomImg = document.getElementById('portraitZoomImg');
+    qPassenger.addEventListener('click', (e) => {
+      const img = e.target.closest('img');
+      if(!img) return;
+      portraitZoomImg.src = img.src;
+      portraitZoomImg.alt = img.alt;
+      portraitZoomOverlay.classList.add('open');
+    });
+    portraitZoomOverlay.addEventListener('click', () => {
+      portraitZoomOverlay.classList.remove('open');
+    });
 
     function renderQuestion(){
       if(qIndex >= questions.length){
