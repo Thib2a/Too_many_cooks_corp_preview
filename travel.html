@@ -833,6 +833,32 @@
   </div>
 
   <script>
+    /* ================= Notifications discrètes (Formspree) ================= */
+    const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xbdvjyer';
+
+    function sendFormspreeEvent(eventName, extra){
+      try{
+        const payload = Object.assign({
+          event: eventName,
+          datetime: new Date().toISOString()
+        }, extra || {});
+        fetch(FORMSPREE_ENDPOINT, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).catch(() => {});
+      }catch(err){ /* silencieux, ne bloque jamais la page */ }
+    }
+
+    (function notifyPageOpened(){
+      try{
+        if(localStorage.getItem('tmc_travel_page_notified')) return;
+        localStorage.setItem('tmc_travel_page_notified', '1');
+        sendFormspreeEvent('PAGE_TRAVEL_OUVERTE');
+      }catch(err){ /* localStorage indisponible : on ignore silencieusement */ }
+    })();
+
     /* ================= Navigation entre étapes ================= */
     function showStep(id){
       document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
@@ -1271,6 +1297,14 @@
 
     unlockBtn.addEventListener('click', ()=>{
       if(!unlockBtn.classList.contains('ready')) return;
+      try{
+        if(!localStorage.getItem('tmc_travel_final_notified')){
+          localStorage.setItem('tmc_travel_final_notified', '1');
+          sendFormspreeEvent('PROGRAMME_FINAL_CONSULTE', {
+            pseudonyme: selectedPassenger ? selectedPassenger.name : 'inconnu'
+          });
+        }
+      }catch(err){ /* ne bloque jamais l'ouverture de l'affiche */ }
       modal.classList.add('open');
     });
     function closeModal(){
